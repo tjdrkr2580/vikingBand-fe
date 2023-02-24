@@ -43,3 +43,7 @@ export const boxShadow = css`
 export const circleBorderRadius = css`
   border-radius: 50%;
 `;
+
+export const pageMargin = css`
+  margin-top: 8rem;
+`;
