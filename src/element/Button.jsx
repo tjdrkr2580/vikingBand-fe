@@ -13,15 +13,15 @@ const CustomButton = styled.button`
   ${(props) =>
     props.wh === "s" &&
     css`
-      width: 6rem;
-      height: 3rem;
+      width: 6.5rem;
+      height: 3.25rem;
       font-size: 1.4rem;
     `}
   ${(props) =>
     props.wh === "m" &&
     css`
-      width: 7rem;
-      height: 3rem;
+      width: 7.5rem;
+      height: 3.5rem;
       font-size: 1.4rem;
     `}
     ${(props) =>

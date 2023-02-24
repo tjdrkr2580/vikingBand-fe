@@ -18,7 +18,15 @@ const ModalWrapper = styled.section`
   ${flexCenter};
 `;
 
-const Modal = styled(motion.div)`
+const ErrorMessage = styled.p`
+  width: 25rem;
+  font-size: 1.15rem;
+  padding-right: 5rem;
+  margin: -0.5rem 0;
+  color: ${(props) => props.theme.primary};
+`;
+
+const Modal = styled(motion.form)`
   width: 35rem;
   height: 42.5rem;
   display: flex;
@@ -73,8 +81,9 @@ const Login = () => {
     register,
     formState: { errors },
     handleSubmit,
+    reset,
   } = useForm();
-
+  const onSubmit = (data) => {};
   return (
     <ModalWrapper
       ref={modalRef}
@@ -84,44 +93,115 @@ const Login = () => {
         }
       }}
     >
-      <Modal variants={modalVariants} initial="start" animate="animate">
+      <Modal
+        variants={modalVariants}
+        initial="start"
+        animate="animate"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         {isRegister !== true ? (
           <>
             <h1>로그인</h1>
-            <input type="text" {...register("userId")} placeholder="아이디" />
+            <input
+              type="text"
+              {...register("userId", { required: "아이디를 입력해주세요." })}
+              placeholder="아이디"
+            />
+            {errors?.userId && (
+              <ErrorMessage>{errors.userId?.message}</ErrorMessage>
+            )}
             <input
               type="password"
-              {...register("password")}
+              {...register("password", {
+                required: "비밀번호를 입력해주세요.",
+              })}
               placeholder="비밀번호"
             />
+            {errors?.password && (
+              <ErrorMessage>{errors.password?.message}</ErrorMessage>
+            )}
             <p>
               계정이 존재하지 않으신가요?{" "}
-              <span onClick={() => setIsRegister(true)}>회원가입</span>
+              <span
+                onClick={() => {
+                  setIsRegister(true);
+                  reset();
+                }}
+              >
+                회원가입
+              </span>
             </p>
             <Button wh="m">로그인</Button>
           </>
         ) : (
           <>
             <h1>회원가입</h1>
-            <input type="text" {...register("userId")} placeholder="아이디" />
-            <input
-              type="password"
-              {...register("password")}
-              placeholder="비밀번호"
-            />
-            <input
-              type="password"
-              {...register("passwordConfirm")}
-              placeholder="비밀번호 확인"
-            />
             <input
               type="text"
-              {...register("passwordConfirm")}
+              {...register("userId", {
+                required: "아이디를 입력해주세요.",
+                minLength: {
+                  value: 4,
+                  message: "4자리 이상의 아이디를 입력하세요.",
+                },
+              })}
+              placeholder="아이디"
+            />
+            {errors?.userId && (
+              <ErrorMessage>{errors.userId?.message}</ErrorMessage>
+            )}
+            <input
+              type="password"
+              {...register("password", {
+                required: "비밀번호를 입력해주세요.",
+                minLength: {
+                  value: 4,
+                  message: "4자리 이상의 비밀번호를 입력하세요.",
+                },
+              })}
+              placeholder="비밀번호"
+            />
+            {errors?.password && (
+              <ErrorMessage>{errors.password?.message}</ErrorMessage>
+            )}
+            <input
+              type="password"
+              {...register("passwordConfirm", {
+                required: "비밀번호 확인을 입력하세요.",
+                minLength: {
+                  value: 4,
+                  message: "4자리 이상의 비밀번호를 사용하세요.",
+                },
+              })}
+              placeholder="비밀번호 확인"
+            />
+            {errors?.passwordConfirm && (
+              <ErrorMessage>{errors.passwordConfirm?.message}</ErrorMessage>
+            )}
+            <input
+              type="text"
+              {...register("email", {
+                required: "이메일을 입력하세요.",
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "이메일 형식에 맞지 않습니다.",
+                },
+              })}
               placeholder="이메일"
             />
+            {errors?.email && (
+              <ErrorMessage>{errors.email?.message}</ErrorMessage>
+            )}
             <p>
               이미 계정이 존재하신가요?{" "}
-              <span onClick={() => setIsRegister(false)}>로그인</span>
+              <span
+                onClick={() => {
+                  setIsRegister(false);
+                  reset();
+                }}
+              >
+                로그인
+              </span>
             </p>
             <Button wh="m">회원가입</Button>
           </>
