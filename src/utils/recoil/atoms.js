@@ -5,3 +5,8 @@ export const darkmodeState = atom({
   key: `state${v1()}`,
   default: false,
 });
+
+export const isUserState = atom({
+  key: `state${v1()}`,
+  default: true,
+});
