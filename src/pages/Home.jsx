@@ -8,5 +8,4 @@ const HomeWrapper = styled.section`
 const Home = () => {
   return <HomeWrapper>Home</HomeWrapper>;
 };
-
 export default Home;
