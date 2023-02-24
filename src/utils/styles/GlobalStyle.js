@@ -8,6 +8,7 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
         text-decoration: none;
         transition: 0.25s filter, 0.25s background-color;
+        list-style: none;
     }
 
     input {
