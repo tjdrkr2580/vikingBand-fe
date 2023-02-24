@@ -10,8 +10,11 @@ const ToggleModeButton = styled.button`
   width: 4rem;
   height: 4rem;
   ${circleBorderRadius}
-  background-color: ${props => props.theme.bgColor};
+  background-color: ${(props) => props.theme.bgColor};
   border: none;
+  svg {
+    color: ${(props) => props.theme.textColor3};
+  }
 `;
 
 const ToggleMode = () => {
