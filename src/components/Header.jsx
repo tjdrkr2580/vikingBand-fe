@@ -54,6 +54,7 @@ const LoginButton = styled.button`
   transform: translateX(-10px);
   background-color: ${props => props.theme.bgColor};
   transition: border 0.3s;
+  color: ${props => props.theme.textColor3};
 
   &:hover {
     border: 2px solid gray;

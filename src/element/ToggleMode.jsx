@@ -19,7 +19,7 @@ const ToggleMode = () => {
   return (
     <ToggleModeButton onClick={() => setIsDark(!isDark)}>
       {isDark === true ? (
-        <BsFillMoonFill size={20} color='white' />
+        <BsFillMoonFill size={20} />
       ) : (
         <BsFillSunFill size={20} />
       )}
