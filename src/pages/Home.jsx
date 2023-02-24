@@ -40,6 +40,8 @@ const PostList = styled.li`
   }
 `;
 
+const PostForm = styled.div;
+
 const Home = () => {
   const posts = [
     {
