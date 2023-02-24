@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import NavBar from "../components/NavBar";
 import { pageMargin } from "../utils/styles/mixins";
 
 const HomeWrapper = styled.section`
@@ -6,6 +7,10 @@ const HomeWrapper = styled.section`
 `;
 
 const Home = () => {
-  return <HomeWrapper>Home</HomeWrapper>;
+  return (
+    <HomeWrapper>
+      <NavBar />
+    </HomeWrapper>
+  );
 };
 export default Home;
