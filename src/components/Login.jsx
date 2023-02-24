@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import React, { useRef, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
+import { modalVariants } from "../utils/animations/variants";
 import { isModalState } from "../utils/recoil/atoms";
 import { boxBorderRadius, flexCenter } from "../utils/styles/mixins";
 
@@ -35,7 +36,7 @@ const Login = () => {
         }
       }}
     >
-      <Modal></Modal>
+      <Modal variants={modalVariants} initial="start" animate="animate"></Modal>
     </ModalWrapper>
   );
 };

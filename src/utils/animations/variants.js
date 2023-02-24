@@ -1,11 +1,9 @@
-import { Variant } from "framer-motion";
-
 export const modalVariants = {
   start: {
     opacity: 0,
     y: 30,
   },
-  animated: {
+  animate: {
     opacity: 1,
     y: 0,
     transition: {
