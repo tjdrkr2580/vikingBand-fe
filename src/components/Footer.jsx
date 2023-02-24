@@ -7,15 +7,18 @@ const StyledFooter = styled.footer`
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: ${props => props.theme.bgColor};
-  color: ${props => props.theme.textColor3};
+  background-color: ${(props) => props.theme.bgColor};
+  color: ${(props) => props.theme.textColor3};
   text-align: center;
   padding: 2rem;
   ${fontSmaller}
+  font-weight: 500;
 `;
 
 const Footer = () => {
-  return <StyledFooter>© 2023. Viking Band Co. all rights reserved.</StyledFooter>;
+  return (
+    <StyledFooter>© 2023. Viking Band Co. all rights reserved.</StyledFooter>
+  );
 };
 
 export default Footer;

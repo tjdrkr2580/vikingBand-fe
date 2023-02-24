@@ -28,7 +28,9 @@ const NavBarWrapper = styled.ul`
   width: 100vw;
   padding-left: 3rem;
   gap: 1.2rem;
+  margin-bottom: 2rem;
 `;
+
 const NavBar = () => {
   const [selectFilter, setSelectFilter] = useState("최신 순");
   const filters = ["최신 순", "좋아요 순"];

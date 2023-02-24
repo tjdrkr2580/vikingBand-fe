@@ -9,6 +9,7 @@ const GlobalStyle = createGlobalStyle`
         text-decoration: none;
         transition: 0.25s filter, 0.25s background-color;
         list-style: none;
+        font-family: Pretendard;
     }
 
     input {
