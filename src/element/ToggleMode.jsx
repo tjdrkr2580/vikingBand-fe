@@ -10,7 +10,7 @@ const ToggleModeButton = styled.button`
   width: 4rem;
   height: 4rem;
   ${circleBorderRadius}
-  background-color: yellow;
+  background-color: ${props => props.theme.bgColor};
   border: none;
 `;
 
@@ -19,7 +19,7 @@ const ToggleMode = () => {
   return (
     <ToggleModeButton onClick={() => setIsDark(!isDark)}>
       {isDark === true ? (
-        <BsFillMoonFill size={20} />
+        <BsFillMoonFill size={20} color ='white' />
       ) : (
         <BsFillSunFill size={20} />
       )}

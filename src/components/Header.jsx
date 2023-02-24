@@ -1,31 +1,70 @@
-import React, { useState } from "react";
+import React from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import ToggleMode from "../element/ToggleMode";
-import { ThemeProvider } from 'styled-components';
-import { lightTheme, darkTheme } from "../utils/styles/theme";
+import { isUserState } from "../utils/recoil/atoms";
+import { fontBigger } from "../utils/styles/mixins";
+import { useState } from "react";
+
+const MainLogo = styled.div`
+  font-family: 'Tilt Prism', cursive;
+  display: flex;
+  ${fontBigger};
+  color: ${props => props.theme.primary};
+`
 
 const HeaderWrapper = styled.header`
   width: 100vw;
   height: 4rem;
   padding: 1rem 0.7rem;
   display: flex;
+  justify-content: space-around;
   background-color: ${props => props.theme.bgColor};
 `;
 
+const StButtons = styled.div`
+  align-items: center;
+  display: flex;
+  margin-top: 20px;
+  gap: 20px;
+  position: relative;
+`
+
 const HeaderButton = styled.button`
   cursor: pointer;
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
   background-color: gray;
   border: none;
+  border-radius: 20%;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-10px);
   border-radius: 50%;
-  margin-left: auto;
-  margin-right: 10px;
 `;
+
+const LoginButton = styled.button`
+  cursor: pointer;
+  width: 7rem;
+  height: 2.5rem;
+  border: 1px solid gray;
+  border-radius: 30px;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(-10px);
+  background-color: ${props => props.theme.bgColor};
+  transition: border 0.3s;
+  color: ${props => props.theme.textColor3};
+
+  &:hover {
+    border: 2px solid gray;
+  }
+`;
+
 
 const DropdownMenu = styled.ul`
   position: absolute;
-  top: 4rem;
+  top: 2rem;
   right: 0;
   list-style-type: none;
   padding: 0;
@@ -47,40 +86,36 @@ const DropdownMenuItem = styled.li`
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(isUserState);
 
   const handleHeaderButtonClick = () => {
-    // 한번씩 누를 때 마다 상태를 바꿔줘야 하니까 
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleLogout = () => {
-
     setIsLoggedIn(false);
   };
 
   return (
-    <ThemeProvider theme={lightTheme}>
     <HeaderWrapper>
-      <ToggleMode />
-      <HeaderButton onClick={handleHeaderButtonClick} />
-      {isDropdownOpen && (
-        <DropdownMenu>
-          {isLoggedIn ? (
-            <>
-              <DropdownMenuItem>My page</DropdownMenuItem>
-              <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
-            </>
-          ) : (
-            <>
-              <DropdownMenuItem>Log in</DropdownMenuItem>
-              <DropdownMenuItem>Sign up</DropdownMenuItem>
-            </>
-          )}
-        </DropdownMenu>
-      )}
+      <MainLogo>Viking Band</MainLogo>
+      <StButtons>
+        <ToggleMode />
+        {isLoggedIn ? (
+          <div>
+            <HeaderButton onClick={handleHeaderButtonClick}></HeaderButton>
+            {isDropdownOpen && (
+              <DropdownMenu>
+                <DropdownMenuItem>My Page</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
+              </DropdownMenu>
+            )}
+          </div>
+        ) : (
+          <LoginButton>Log in</LoginButton>
+        )}
+      </StButtons>
     </HeaderWrapper>
-    </ThemeProvider>
   );
 };
 
