@@ -106,7 +106,7 @@ const Header = () => {
             <HeaderButton onClick={handleHeaderButtonClick}></HeaderButton>
             {isDropdownOpen && (
               <DropdownMenu>
-                <DropdownMenuItem>My Page</DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>My Page</DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
               </DropdownMenu>
             )}
