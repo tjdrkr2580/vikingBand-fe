@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo, useRef } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import ToggleMode from "../element/ToggleMode";
-import { isUserState } from "../utils/recoil/atoms";
+import { isModalState, isUserState } from "../utils/recoil/atoms";
 import {
   boxBorderRadius,
   circleBorderRadius,
@@ -99,6 +99,8 @@ const Header = () => {
     setIsLoggedIn(false);
   };
 
+  const setVisible = useSetRecoilState(isModalState);
+
   return (
     <HeaderWrapper
       ref={homeWrapperRef}
@@ -125,7 +127,7 @@ const Header = () => {
             )}
           </div>
         ) : (
-          <Button>로그인</Button>
+          <Button onClick={() => setVisible(true)}>로그인</Button>
         )}
       </StButtons>
     </HeaderWrapper>

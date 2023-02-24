@@ -8,6 +8,9 @@ import {
   pageMargin,
 } from "../utils/styles/mixins";
 import test from "../assets/test.jpg";
+import { useRecoilValue } from "recoil";
+import { isModalState } from "../utils/recoil/atoms";
+import Login from "../components/Login";
 
 const HomeWrapper = styled.section`
   min-height: 77.5vh;
@@ -90,6 +93,7 @@ const PostForm = styled.section`
 `;
 
 const Home = () => {
+  const visible = useRecoilValue(isModalState);
   const posts = [
     {
       id: 2,
@@ -143,7 +147,8 @@ const Home = () => {
               <h1 className="title">{post.title}</h1>
               <span className="subject">{post.subject}</span>
               <p className="desc">
-                ㅇ장ㅈ마ㅐㅁ제ㅐㅈ마ㅐㅔㅇㅈ마ㅐㅔㅁㅇ자ㅔㅐㅁㅇ제ㅏㅐㅈㅁ아매ㅔㅈㅇㅁ재ㅏㅔ
+                저희는 무슨무슨 스터디입니다, 저희는 어디어디에서 만날 것
+                입니다.
               </p>
               <p className="date">
                 {new Date(post.createdAt).toLocaleString()}
@@ -153,6 +158,7 @@ const Home = () => {
           </PostList>
         ))}
       </PostLists>
+      {visible === true && <Login />}
     </HomeWrapper>
   );
 };

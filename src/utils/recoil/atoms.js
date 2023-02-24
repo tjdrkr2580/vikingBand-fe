@@ -8,5 +8,10 @@ export const darkmodeState = atom({
 
 export const isUserState = atom({
   key: `state${v1()}`,
-  default: true,
+  default: false,
+});
+
+export const isModalState = atom({
+  key: `state${v1()}`,
+  default: false,
 });
