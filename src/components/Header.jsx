@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useCallback, useMemo, useRef } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import ToggleMode from "../element/ToggleMode";
 import { isUserState } from "../utils/recoil/atoms";
-import { circleBorderRadius, fontBigger } from "../utils/styles/mixins";
+import {
+  boxBorderRadius,
+  circleBorderRadius,
+  fontBigger,
+} from "../utils/styles/mixins";
 import { useState } from "react";
 import unnamed from "../assets/unname.jpg";
+import Button from "../element/Button";
 
 const MainLogo = styled.h1`
   cursor: pointer;
@@ -38,8 +43,9 @@ const StButtons = styled.div`
 `;
 
 const HeaderButton = styled.img`
-  width: 3rem;
-  height: 3rem;
+  cursor: pointer;
+  width: 3.5rem;
+  height: 3.5rem;
   ${circleBorderRadius}
   object-fit: cover;
 `;
@@ -56,7 +62,6 @@ const LoginButton = styled.button`
   background-color: ${(props) => props.theme.bgColor};
   transition: border 0.3s;
   color: ${(props) => props.theme.textColor3};
-
   &:hover {
     border: 2px solid gray;
   }
@@ -64,28 +69,27 @@ const LoginButton = styled.button`
 
 const DropdownMenu = styled.ul`
   position: absolute;
-  top: 2rem;
-  right: 0;
+  top: 3rem;
+  right: 0rem;
   list-style-type: none;
   padding: 0;
   margin: 0;
-  background-color: white;
-  border: 1px solid black;
-  border-radius: 4px;
-  transform: translateX(-10px);
+  background-color: ${(props) => props.theme.bgColor};
+  box-shadow: ${(props) => props.theme.shadow};
+  ${boxBorderRadius}
 `;
 
 const DropdownMenuItem = styled.li`
-  padding: 1rem;
+  padding: 1.4rem;
   cursor: pointer;
-  &:hover {
-    background-color: lightgray;
-  }
+  font-size: 1.2rem;
 `;
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isUserState);
+
+  const homeWrapperRef = useRef(null);
 
   const handleHeaderButtonClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -96,7 +100,15 @@ const Header = () => {
   };
 
   return (
-    <HeaderWrapper>
+    <HeaderWrapper
+      ref={homeWrapperRef}
+      onClick={(e) => {
+        if (isDropdownOpen !== true) return;
+        if (homeWrapperRef.current === e.target) {
+          setIsDropdownOpen(false);
+        }
+      }}
+    >
       <MainLogo>Viking Band</MainLogo>
       <StButtons>
         <ToggleMode />
@@ -105,17 +117,15 @@ const Header = () => {
             <HeaderButton onClick={handleHeaderButtonClick} src={unnamed} />
             {isDropdownOpen && (
               <DropdownMenu>
+                <DropdownMenuItem>프로필</DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
-                  My Page
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout}>
-                  Log out
+                  로그아웃
                 </DropdownMenuItem>
               </DropdownMenu>
             )}
           </div>
         ) : (
-          <LoginButton>Log in</LoginButton>
+          <Button>로그인</Button>
         )}
       </StButtons>
     </HeaderWrapper>
