@@ -2,6 +2,8 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Profile from "./pages/Profile";
+import Detail from "./pages/Detail";
 import GlobalStyle from "./utils/styles/GlobalStyle";
 import styled, { ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
@@ -28,6 +30,8 @@ function App() {
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/post/:id" element={<Detail />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
           <Footer />
         </BrowserRouter>

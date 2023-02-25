@@ -88,30 +88,27 @@ const Login = () => {
 
   // const {isLoading, isError, data} = useQuery("newUser", addNewUser)
 
-  const registerMutation = useMutation((newUser) => addNewUser(newUser))
+  const registerMutation = useMutation((newUser) => addNewUser(newUser));
 
   // const loginMutation = useMutation((loginUser)=> loginUser(loginUser))
 
   const onSubmit = async (data) => {
-  
     if (isRegister !== true) {
-      
       const loginUser = {
         username: data.userId,
-        password: data.password
-      }
+        password: data.password,
+      };
 
       // const response = await loginMutation.mutateAsync(loginUser)
-
     } else {
       const newUser = {
-        username : data.userId,
+        username: data.userId,
         email: data.email,
-        password: data.password
-      }
-      
-      const response = await registerMutation.mutateAsync(newUser)
-      console.log(response)
+        password: data.password,
+      };
+
+      const response = await registerMutation.mutateAsync(newUser);
+      console.log(response);
     }
   };
 
@@ -186,8 +183,8 @@ const Login = () => {
               {...register("password", {
                 required: "비밀번호를 입력해주세요.",
                 minLength: {
-                  value: 4,
-                  message: "4자리 이상의 비밀번호를 입력하세요.",
+                  value: 8,
+                  message: "8자리 이상의 비밀번호를 입력하세요.",
                 },
               })}
               placeholder="비밀번호"
@@ -199,10 +196,6 @@ const Login = () => {
               type="password"
               {...register("passwordConfirm", {
                 required: "비밀번호 확인을 입력하세요.",
-                minLength: {
-                  value: 4,
-                  message: "4자리 이상의 비밀번호를 사용하세요.",
-                },
               })}
               placeholder="비밀번호 확인"
             />
