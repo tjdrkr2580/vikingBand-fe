@@ -1,7 +1,10 @@
 import axios from "axios";
 
-export const loginUser = async (loginUser) => {
-  const response = await axios.post("", loginUser, {
+const API_BASE_URL = "http://viking-band.chit-chat.shop";
+
+export const loginUser = async (User) => {
+  console.log(loginUser)
+  const response = await axios.post(`${API_BASE_URL}/api/members/login`, User, {
     withCredentials: true,
   });
   return response.data;
@@ -13,7 +16,7 @@ export const loginUser = async (loginUser) => {
 
 export const addNewUser = async (newUser) => {
   console.log(newUser);
-  const response = await axios.post("/api/members/signup", newUser, {
+  const response = await axios.post(`${API_BASE_URL}/api/members/signup`, newUser, {
     withCredentials: true,
   });
   return response.data;

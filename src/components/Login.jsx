@@ -86,20 +86,22 @@ const Login = () => {
     reset,
   } = useForm();
 
-  // const {isLoading, isError, data} = useQuery("newUser", addNewUser)
+  
 
   const registerMutation = useMutation((newUser) => addNewUser(newUser));
 
-  // const loginMutation = useMutation((loginUser)=> loginUser(loginUser))
+  const loginMutation = useMutation((User)=> loginUser(User))
 
   const onSubmit = async (data) => {
     if (isRegister !== true) {
-      const loginUser = {
+      const User = {
         username: data.userId,
         password: data.password,
       };
 
-      // const response = await loginMutation.mutateAsync(loginUser)
+     const response = await loginMutation.mutateAsync(User)
+     console.log(response)
+
     } else {
       const newUser = {
         username: data.userId,
