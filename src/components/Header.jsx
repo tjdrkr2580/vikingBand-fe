@@ -3,6 +3,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import ToggleMode from "../element/ToggleMode";
 import { isModalState, isUserState } from "../utils/recoil/atoms";
+import { useNavigate } from "react-router-dom";
 import {
   boxBorderRadius,
   circleBorderRadius,
@@ -101,6 +102,8 @@ const Header = () => {
 
   const setVisible = useSetRecoilState(isModalState);
 
+  const navigate = useNavigate()
+
   return (
     <HeaderWrapper
       ref={homeWrapperRef}
@@ -119,7 +122,7 @@ const Header = () => {
             <HeaderButton onClick={handleHeaderButtonClick} src={unnamed} />
             {isDropdownOpen && (
               <DropdownMenu>
-                <DropdownMenuItem>프로필</DropdownMenuItem>
+                <DropdownMenuItem onClick={navigate('/profile')}>프로필</DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   로그아웃
                 </DropdownMenuItem>
