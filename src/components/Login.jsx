@@ -7,6 +7,8 @@ import Button from "../element/Button";
 import { modalVariants } from "../utils/animations/variants";
 import { isModalState } from "../utils/recoil/atoms";
 import { boxBorderRadius, flexCenter } from "../utils/styles/mixins";
+import { addNewUser, loginUser } from "../utils/axios/axios";
+import { useMutation } from "react-query";
 
 const ModalWrapper = styled.section`
   position: absolute;
@@ -83,7 +85,36 @@ const Login = () => {
     handleSubmit,
     reset,
   } = useForm();
-  const onSubmit = (data) => {};
+
+  // const {isLoading, isError, data} = useQuery("newUser", addNewUser)
+
+  const registerMutation = useMutation((newUser) => addNewUser(newUser))
+
+  // const loginMutation = useMutation((loginUser)=> loginUser(loginUser))
+
+  const onSubmit = async (data) => {
+  
+    if (isRegister !== true) {
+      
+      const loginUser = {
+        username: data.userId,
+        password: data.password
+      }
+
+      // const response = await loginMutation.mutateAsync(loginUser)
+
+    } else {
+      const newUser = {
+        username : data.userId,
+        email: data.email,
+        password: data.password
+      }
+      
+      const response = await registerMutation.mutateAsync(newUser)
+      console.log(response)
+    }
+  };
+
   return (
     <ModalWrapper
       ref={modalRef}
