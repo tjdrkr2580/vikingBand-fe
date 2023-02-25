@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { flexCenter } from "../utils/styles/mixins";
 
-const NavElement = styled.li`
+export const NavElement = styled.li`
   ${flexCenter};
   padding: 0.4rem 0.6rem;
   border-bottom: 0.3rem solid transparent;
@@ -12,7 +12,7 @@ const NavElement = styled.li`
   }
 `;
 
-const NavActiveElement = styled.li`
+export const NavActiveElement = styled.li`
   cursor: pointer;
   ${flexCenter};
   padding: 0.4rem 0.6rem;
@@ -22,7 +22,7 @@ const NavActiveElement = styled.li`
   }
 `;
 
-const NavBarWrapper = styled.ul`
+export const NavBarWrapper = styled.ul`
   cursor: pointer;
   display: flex;
   width: 100vw;
