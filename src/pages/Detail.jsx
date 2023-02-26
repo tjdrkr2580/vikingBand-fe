@@ -2,7 +2,12 @@ import React from "react";
 import styled from "styled-components";
 import study from "../assets/study.jpg";
 import { useParams } from "react-router-dom";
-import { fontMedium, flexCenter, boxBorderRadius, elipsis } from "../utils/styles/mixins";
+import {
+  fontMedium,
+  flexCenter,
+  boxBorderRadius,
+  elipsis,
+} from "../utils/styles/mixins";
 
 
 // 전체 감싸기
@@ -23,7 +28,7 @@ const CreatorBox = styled.div`
   margin-right: 100rem;
   width: 100%;
   margin-bottom: 0.2rem;
-`
+`;
 // img
 const Image = styled.img`
   max-width: 35%;
@@ -31,9 +36,9 @@ const Image = styled.img`
   border-radius: 5px;
 `;
 
-//제목 , 주제, 날짜, 상세설명 순으로 스타일 적용. 
+//제목 , 주제, 날짜, 상세설명 순으로 스타일 적용.
 const DetailForm = styled.div`
-padding: 0.6rem;
+  padding: 0.6rem;
   .title {
     ${fontMedium}
   }
@@ -65,11 +70,10 @@ padding: 0.6rem;
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-`
-
+`;
 
 const Detail = () => {
-
+`
   const posts = [
     {
       id: 22311,
@@ -92,25 +96,18 @@ const Detail = () => {
       modifiedAt: "2023-02-24T04:02:51.191694",
     },
   ];
-
   const { id } = useParams();
-  const post = posts.find(post => post.id === parseInt(id));
-
+  const post = posts.find((post) => post.id === parseInt(id));
   return (
     <DetailWrapper>
-      
       <CreatorBox>Created by {post.author}</CreatorBox>
       <Image src={study} />
       <DetailForm>
-              <h1 className="title">{post.title}</h1>
-              <span className="subject">{post.subject}</span>
-              <p className="date">
-                {new Date(post.createdAt).toLocaleString()}
-              </p>
-              <p className="desc">
-                저희는 무슨무슨 스터디입니다, 저희는 어디어디에서 만날 것
-                입니다.
-              </p>
+        <h1 className="title">{post.title}</h1>
+        <span className="subject">{post.subject}</span>
+        <p className="date">{new Date(post.createdAt).toLocaleString()}</p>
+        <p className="desc">
+          저희는 무슨무슨 스터디입니다, 저희는 어디어디에서 만날 것 입니다.
       </DetailForm>
     </DetailWrapper>
   );
