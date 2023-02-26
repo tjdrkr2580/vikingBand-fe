@@ -123,13 +123,7 @@ const Detail = () => {
       alert("찜한 스터디에서 삭제되었습니다.");
     }
   };
-<<<<<<< HEAD
   // 가입신청
-=======
-
-  // 가입신청
-
->>>>>>> 69fb7ea (feat|detail UI correction)
   const [registered, setRegistered] = useState(false);
   const handleRegisterButton = () => {
     setRegistered(!registered);
@@ -139,10 +133,6 @@ const Detail = () => {
       alert("가입 신청 취소 완료!");
     }
   };
-<<<<<<< HEAD
-=======
-
->>>>>>> 69fb7ea (feat|detail UI correction)
   // 이전으로
   const navigate = useNavigate();
   const backToHomeHandler = () => {
