@@ -6,10 +6,11 @@ import Profile from "./pages/Profile";
 import Detail from "./pages/Detail";
 import GlobalStyle from "./utils/styles/GlobalStyle";
 import styled, { ThemeProvider } from "styled-components";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { darkmodeState, studyModalState } from "./utils/recoil/atoms";
 import { darkTheme, lightTheme } from "./utils/styles/theme";
 import StudyModal from "./components/StudyModal";
+import { useEffect } from "react";
 
 const RootWrapper = styled.div`
   display: flex;
@@ -22,8 +23,14 @@ const RootWrapper = styled.div`
 `;
 
 function App() {
-  const isDark = useRecoilValue(darkmodeState);
+  const [isDark, setDark] = useRecoilState(darkmodeState);
   const isModalStudy = useRecoilValue(studyModalState);
+  const { vDark } = JSON.parse(localStorage.getItem("vDark"));
+
+  useEffect(() => {
+    setDark(vDark);
+  }, []);
+
   return (
     <ThemeProvider theme={isDark === true ? darkTheme : lightTheme}>
       <RootWrapper>

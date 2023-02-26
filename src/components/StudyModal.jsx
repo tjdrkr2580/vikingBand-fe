@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import Button from "../element/Button";
 import { motion } from "framer-motion";
 import { modalVariants } from "../utils/animations/variants";
-import { useMutation } from "react-query";
+import { QueryClient, useMutation, useQueryClient } from "react-query";
 import { addNewStudy } from "../utils/axios/axios";
 
 const StudyModalWrapper = styled.section`
@@ -27,6 +27,7 @@ const ErrorMessage = styled.p`
 `;
 
 const StudyModal = () => {
+  const queryClient = useQueryClient();
   const studymodal = useRef(null);
   const setStudyModalVisible = useSetRecoilState(studyModalState);
   const {
@@ -36,7 +37,11 @@ const StudyModal = () => {
     formState: { errors },
   } = useForm();
 
-  const studyCreateMutate = useMutation((newStudy) => addNewStudy(newStudy));
+  const studyCreateMutate = useMutation((newStudy) => addNewStudy(newStudy), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("studies");
+    },
+  });
 
   const onSubmit = async (data) => {
     const newStudy = {
@@ -46,9 +51,8 @@ const StudyModal = () => {
       maxMember: parseInt(data.maxMember),
     };
     const res = await studyCreateMutate.mutateAsync(newStudy);
-    console.log(res);
-    reset();
     setStudyModalVisible(false);
+    reset();
   };
 
   return (

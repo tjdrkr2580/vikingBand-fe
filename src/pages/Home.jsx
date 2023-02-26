@@ -12,6 +12,9 @@ import { useRecoilValue } from "recoil";
 import { isModalState } from "../utils/recoil/atoms";
 import Login from "../components/Login";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "react-query";
+import { getStudies } from "../utils/axios/axios";
+import { AiFillHeart } from "react-icons/ai";
 
 const HomeWrapper = styled.section`
   min-height: 77.5vh;
@@ -49,7 +52,6 @@ const PostList = styled.li`
     ${boxBorderRadius}
     object-fit: cover;
   }
-
   ${boxBorderRadius}
   transition: 0.25s transform;
   &:hover {
@@ -65,12 +67,11 @@ const PostForm = styled.section`
   }
   .subject {
     color: #d1d6e6;
-    max-width: 5rem;
+    width: fit-content;
     padding: 0.4rem 0.6rem;
     background-color: ${(props) => props.theme.primary};
-    ${flexCenter};
     ${boxBorderRadius};
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
   .desc {
     font-size: 1.05rem;
@@ -81,13 +82,19 @@ const PostForm = styled.section`
     font-size: 1.1rem;
     font-weight: 500;
   }
-  .author {
-    margin-top: 1.5rem;
-    font-size: 1.1rem;
+  .post-bottom {
     display: flex;
-    font-weight: 500;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    .author {
+      font-size: 1.2rem;
+      display: flex;
+      font-weight: 500;
+      justify-content: flex-end;
+    }
   }
+
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -101,74 +108,36 @@ const Home = () => {
     navigate(`/post/${postId}`);
   };
 
-  const posts = [
-    {
-      id: 223,
-      userId: 2,
-      author: "teste2r",
-      title: "영어공부",
-      subject: "주제2",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-    {
-      id: 21,
-      userId: 2,
-      author: "qqwe123",
-      title: "부동산",
-      subject: "주제2",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-    {
-      id: 22311,
-      userId: 2,
-      author: "vccvb123",
-      title: "공인중개사",
-      subject: "주제1",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-    {
-      id: 2435,
-      userId: 2,
-      author: "bvcvcsd123",
-      title: "모각코",
-      subject: "주제3",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-  ];
+  const { isLoading, data } = useQuery("studies", getStudies);
   return (
     <HomeWrapper>
       <NavBar />
       <PostLists>
-        {posts.map((post, i) => (
-          <PostList
-            key={i}
-            onClick={() => {
-              navigateToPost(post.id);
-            }}
-          >
-            <img src={test} alt={post.title} />
-            <PostForm>
-              <h1 className="title">{post.title}</h1>
-              <span className="subject">{post.subject}</span>
-              <p className="desc">
-                저희는 무슨무슨 스터디입니다, 저희는 어디어디에서 만날 것
-                입니다.
-              </p>
-              <p className="date">
-                {new Date(post.createdAt).toLocaleString()}
-              </p>
-              <span className="author">작성자 : {post.author}</span>
-            </PostForm>
-          </PostList>
-        ))}
+        {isLoading === false &&
+          data.data.data.map((post, i) => (
+            <PostList
+              key={i}
+              onClick={() => {
+                navigateToPost(post.id);
+              }}
+            >
+              <img src={test} alt={post.title} />
+              <PostForm>
+                <h1 className="title">{post.title}</h1>
+                <span className="subject">{post.subject}</span>
+                <p className="desc">{post.content}</p>
+                <p className="date">
+                  {new Date(post.createdAt).toLocaleString()}
+                </p>
+                <section className="post-bottom">
+                  <AiFillHeart size={22} />
+                  <span className="author">
+                    작성자 : {post.author.memberName}
+                  </span>
+                </section>
+              </PostForm>
+            </PostList>
+          ))}
       </PostLists>
       {visible === true && <Login />}
     </HomeWrapper>

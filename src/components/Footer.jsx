@@ -3,16 +3,19 @@ import styled from "styled-components";
 import { fontSmaller } from "../utils/styles/mixins";
 
 const StyledFooter = styled.footer`
-  position: fixed;
+  position: relative;
+  margin-top: 3rem;
   bottom: 0;
   left: 0;
   width: 100%;
   background-color: ${(props) => props.theme.bgColor};
   color: ${(props) => props.theme.textColor3};
   text-align: center;
-  padding: 2rem;
+
   ${fontSmaller}
+  width: 100vw;
   font-weight: 500;
+  height: 3rem;
 `;
 
 const Footer = () => {

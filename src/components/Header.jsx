@@ -14,7 +14,7 @@ import {
   fontBigger,
 } from "../utils/styles/mixins";
 import { useState } from "react";
-import unnamed from "../assets/unname.jpg";
+import unnamed from "../assets/unname.png";
 import Button from "../element/Button";
 import { useCookies } from "react-cookie";
 
