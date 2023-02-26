@@ -11,6 +11,7 @@ import test from "../assets/test.jpg";
 import { useRecoilValue } from "recoil";
 import { isModalState } from "../utils/recoil/atoms";
 import Login from "../components/Login";
+import { useNavigate } from "react-router-dom";
 
 const HomeWrapper = styled.section`
   min-height: 77.5vh;
@@ -49,13 +50,11 @@ const PostList = styled.li`
     object-fit: cover;
   }
 
-  ${boxBorderRadius}
+   ${boxBorderRadius}
   transition: 0.25s transform;
-  &:hover {
-    transform: scale(0.98);
-  }
+  &:hover {transform: scale(0.98);}
   box-shadow: ${(props) => props.theme.shadow};
-`;
+`
 
 const PostForm = styled.section`
   padding: 0.6rem;
@@ -92,11 +91,19 @@ const PostForm = styled.section`
   gap: 0.8rem;
 `;
 
+
 const Home = () => {
+
   const visible = useRecoilValue(isModalState);
+  const navigate = useNavigate()
+
+  const navigateToPost = (postId) => {
+    navigate(`/post/${postId}`);
+  }
+
   const posts = [
     {
-      id: 2,
+      id: 223,
       userId: 2,
       author: "teste2r",
       title: "영어공부",
@@ -106,7 +113,7 @@ const Home = () => {
       modifiedAt: "2023-02-24T04:02:51.191694",
     },
     {
-      id: 2,
+      id: 21,
       userId: 2,
       author: "qqwe123",
       title: "부동산",
@@ -116,7 +123,7 @@ const Home = () => {
       modifiedAt: "2023-02-24T04:02:51.191694",
     },
     {
-      id: 2,
+      id: 22311,
       userId: 2,
       author: "vccvb123",
       title: "공인중개사",
@@ -126,7 +133,7 @@ const Home = () => {
       modifiedAt: "2023-02-24T04:02:51.191694",
     },
     {
-      id: 2,
+      id: 2435,
       userId: 2,
       author: "bvcvcsd123",
       title: "모각코",
@@ -141,7 +148,7 @@ const Home = () => {
       <NavBar />
       <PostLists>
         {posts.map((post, i) => (
-          <PostList key={i}>
+          <PostList key={i} onClick={() =>{navigateToPost(post.id)}}>
             <img src={test} alt={post.title} />
             <PostForm>
               <h1 className="title">{post.title}</h1>
