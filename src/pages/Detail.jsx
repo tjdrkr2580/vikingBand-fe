@@ -9,6 +9,7 @@ import {
   elipsis,
 } from "../utils/styles/mixins";
 
+
 // 전체 감싸기
 const DetailWrapper = styled.section`
   min-height: 77.5vh;
@@ -72,6 +73,7 @@ const DetailForm = styled.div`
 `;
 
 const Detail = () => {
+`
   const posts = [
     {
       id: 22311,
@@ -106,7 +108,6 @@ const Detail = () => {
         <p className="date">{new Date(post.createdAt).toLocaleString()}</p>
         <p className="desc">
           저희는 무슨무슨 스터디입니다, 저희는 어디어디에서 만날 것 입니다.
-        </p>
       </DetailForm>
     </DetailWrapper>
   );
