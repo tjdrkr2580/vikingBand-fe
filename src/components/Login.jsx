@@ -10,21 +10,22 @@ import {
   isUserState,
   userInfoState,
 } from "../utils/recoil/atoms";
-import { modalStyle, modalWrapperStyle } from "../utils/styles/mixins";
+import {
+  modalStyle,
+  modalWrapperStyle,
+  errorStyle,
+} from "../utils/styles/mixins";
 import { addNewUser, loginUser } from "../utils/axios/axios";
 import { useMutation } from "react-query";
 import { useCookies } from "react-cookie";
+import axios from "axios";
 
 const ModalWrapper = styled.section`
   ${modalWrapperStyle}
 `;
 
 const ErrorMessage = styled.p`
-  width: 25rem;
-  font-size: 1.15rem;
-  padding-right: 5rem;
-  margin: -0.5rem 0;
-  color: ${(props) => props.theme.primary};
+  ${errorStyle}
 `;
 
 const Modal = styled(motion.form)`
@@ -54,8 +55,7 @@ const Login = () => {
       };
       const res = await loginMutation.mutateAsync(User);
       await setCookie("viking-band-token", res.headers.authorization);
-      setUserInfo(res.data.data);
-      console.log(res.data);
+      axios.setUserInfo(res.data.data);
       setIsUser(true);
       setVisible(false);
     } else {

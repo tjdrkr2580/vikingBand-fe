@@ -106,3 +106,11 @@ export const modalStyle = css`
     }
   }
 `;
+
+export const errorStyle = css`
+  width: 25rem;
+  font-size: 1.15rem;
+  padding-right: 5rem;
+  margin: -0.5rem 0;
+  color: ${(props) => props.theme.primary};
+`;
