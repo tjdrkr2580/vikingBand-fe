@@ -10,19 +10,13 @@ import {
   isUserState,
   userInfoState,
 } from "../utils/recoil/atoms";
-import { boxBorderRadius, flexCenter } from "../utils/styles/mixins";
+import { modalStyle, modalWrapperStyle } from "../utils/styles/mixins";
 import { addNewUser, loginUser } from "../utils/axios/axios";
 import { useMutation } from "react-query";
 import { useCookies } from "react-cookie";
 
 const ModalWrapper = styled.section`
-  position: absolute;
-  z-index: 999;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-  ${flexCenter};
+  ${modalWrapperStyle}
 `;
 
 const ErrorMessage = styled.p`
@@ -34,50 +28,7 @@ const ErrorMessage = styled.p`
 `;
 
 const Modal = styled(motion.form)`
-  width: 35rem;
-  height: 42.5rem;
-  display: flex;
-  gap: 1rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: ${(props) => props.theme.bgColor};
-  ${boxBorderRadius}
-  input {
-    width: 20rem;
-    background-color: transparent;
-    height: 4rem;
-    color: ${(props) => props.theme.textColor3};
-    letter-spacing: 0.08rem;
-    font-size: 1.35rem;
-    padding: 0.4rem 0.8rem;
-    border: 0.1rem solid #797777;
-    border-radius: 0.8rem;
-
-    &:focus {
-      outline: none;
-    }
-  }
-  h1 {
-    margin-left: 3rem;
-    font-size: 2.2rem;
-    align-self: flex-start;
-    margin-bottom: 1rem;
-  }
-  p {
-    font-weight: 500;
-    padding-left: 3.5rem;
-    font-size: 1.075rem;
-  }
-  span {
-    font-weight: 500;
-    color: ${(props) => props.theme.primary};
-    cursor: pointer;
-    font-size: 1.075rem;
-    &:hover {
-      text-decoration: underline;
-    }
-  }
+  ${modalStyle}
 `;
 
 const Login = () => {

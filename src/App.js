@@ -7,8 +7,9 @@ import Detail from "./pages/Detail";
 import GlobalStyle from "./utils/styles/GlobalStyle";
 import styled, { ThemeProvider } from "styled-components";
 import { useRecoilValue } from "recoil";
-import { darkmodeState } from "./utils/recoil/atoms";
+import { darkmodeState, studyModalState } from "./utils/recoil/atoms";
 import { darkTheme, lightTheme } from "./utils/styles/theme";
+import StudyModal from "./components/StudyModal";
 
 const RootWrapper = styled.div`
   display: flex;
@@ -22,6 +23,7 @@ const RootWrapper = styled.div`
 
 function App() {
   const isDark = useRecoilValue(darkmodeState);
+  const isModalStudy = useRecoilValue(studyModalState);
   return (
     <ThemeProvider theme={isDark === true ? darkTheme : lightTheme}>
       <RootWrapper>
@@ -35,6 +37,7 @@ function App() {
           </Routes>
           <Footer />
         </BrowserRouter>
+        {isModalStudy === true && <StudyModal />}
       </RootWrapper>
     </ThemeProvider>
   );

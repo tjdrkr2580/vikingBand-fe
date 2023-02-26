@@ -2,7 +2,11 @@ import React, { useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import ToggleMode from "../element/ToggleMode";
-import { isModalState, isUserState } from "../utils/recoil/atoms";
+import {
+  isModalState,
+  isUserState,
+  studyModalState,
+} from "../utils/recoil/atoms";
 import { Link, useNavigate } from "react-router-dom";
 import {
   boxBorderRadius,
@@ -52,27 +56,10 @@ const HeaderButton = styled.img`
   object-fit: cover;
 `;
 
-const LoginButton = styled.button`
-  cursor: pointer;
-  width: 7rem;
-  height: 2.5rem;
-  border: 1px solid gray;
-  border-radius: 30px;
-  justify-content: center;
-  align-items: center;
-  transform: translateX(-10px);
-  background-color: ${(props) => props.theme.bgColor};
-  transition: border 0.3s;
-  color: ${(props) => props.theme.textColor3};
-  &:hover {
-    border: 2px solid gray;
-  }
-`;
-
 const DropdownMenu = styled.ul`
   position: absolute;
   top: 3rem;
-  right: 0rem;
+  right: 5rem;
   list-style-type: none;
   padding: 0;
   margin: 0;
@@ -93,6 +80,7 @@ const Header = () => {
   const [etc, etc2, removeCookie] = useCookies();
   const homeWrapperRef = useRef(null);
   const navigate = useNavigate();
+  const setStudyModal = useSetRecoilState(studyModalState);
 
   const handleHeaderButtonClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -122,7 +110,7 @@ const Header = () => {
       <StButtons>
         <ToggleMode />
         {isLoggedIn ? (
-          <div>
+          <>
             <HeaderButton onClick={handleHeaderButtonClick} src={unnamed} />
             {isDropdownOpen && (
               <DropdownMenu>
@@ -134,7 +122,8 @@ const Header = () => {
                 </DropdownMenuItem>
               </DropdownMenu>
             )}
-          </div>
+            <Button onClick={() => setStudyModal(true)}>추가하기</Button>
+          </>
         ) : (
           <Button onClick={() => setVisible(true)}>로그인</Button>
         )}

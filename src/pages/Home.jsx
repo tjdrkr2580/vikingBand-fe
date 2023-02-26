@@ -50,11 +50,13 @@ const PostList = styled.li`
     object-fit: cover;
   }
 
-   ${boxBorderRadius}
+  ${boxBorderRadius}
   transition: 0.25s transform;
-  &:hover {transform: scale(0.98);}
+  &:hover {
+    transform: scale(0.98);
+  }
   box-shadow: ${(props) => props.theme.shadow};
-`
+`;
 
 const PostForm = styled.section`
   padding: 0.6rem;
@@ -91,15 +93,13 @@ const PostForm = styled.section`
   gap: 0.8rem;
 `;
 
-
 const Home = () => {
-
   const visible = useRecoilValue(isModalState);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const navigateToPost = (postId) => {
     navigate(`/post/${postId}`);
-  }
+  };
 
   const posts = [
     {
@@ -148,7 +148,12 @@ const Home = () => {
       <NavBar />
       <PostLists>
         {posts.map((post, i) => (
-          <PostList key={i} onClick={() =>{navigateToPost(post.id)}}>
+          <PostList
+            key={i}
+            onClick={() => {
+              navigateToPost(post.id);
+            }}
+          >
             <img src={test} alt={post.title} />
             <PostForm>
               <h1 className="title">{post.title}</h1>

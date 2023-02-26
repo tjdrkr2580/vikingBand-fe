@@ -9,10 +9,6 @@ import {
   elipsis,
 } from "../utils/styles/mixins";
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 2c6a1d2 (fix | parsing eslint)
 // 전체 감싸기
 const DetailWrapper = styled.section`
   min-height: 77.5vh;
