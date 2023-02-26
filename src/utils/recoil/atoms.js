@@ -3,7 +3,7 @@ import { v1 } from "uuid";
 
 export const darkmodeState = atom({
   key: `state${v1()}`,
-  default: false,
+  default: true,
 });
 
 export const isUserState = atom({

@@ -12,6 +12,10 @@ const GlobalStyle = createGlobalStyle`
         font-family: Pretendard;
     }
 
+    body {
+        overflow-x: hidden;
+    }
+
     input {
         &:focus {
             outline: none;

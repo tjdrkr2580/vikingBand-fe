@@ -1,11 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://viking-band.chit-chat.shop";
+axios.defaults.withCredentials = true;
 
 export const loginUser = async (User) => {
-  const response = await axios.post(`${API_BASE_URL}/api/members/login`, User, {
-    withCredentials: true,
-  });
+  const response = await axios.post(`/api/members/login`, User);
   return response;
 };
 
@@ -14,14 +12,16 @@ export const loginUser = async (User) => {
 // }
 
 export const addNewUser = async (newUser) => {
-  const response = await axios.post(
-    `${API_BASE_URL}/api/members/signup`,
-    newUser
-  );
+  const response = await axios.post(`/api/members/signup`, newUser);
   return response;
 };
 
 export const addNewStudy = async (newStudy) => {
-  const response = await axios.post(`${API_BASE_URL}/api/studies`, newStudy);
+  const response = await axios.post(`/api/studies`, newStudy);
+  return response;
+};
+
+export const getStudies = async () => {
+  const response = await axios.get("/api/studies");
   return response;
 };
