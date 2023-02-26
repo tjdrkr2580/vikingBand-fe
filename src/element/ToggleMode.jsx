@@ -19,8 +19,11 @@ const ToggleModeButton = styled.button`
 
 const ToggleMode = () => {
   const [isDark, setIsDark] = useRecoilState(darkmodeState);
+  const onToggleDarkmode = () => {
+    setIsDark(!isDark);
+  };
   return (
-    <ToggleModeButton onClick={() => setIsDark(!isDark)}>
+    <ToggleModeButton onClick={() => onToggleDarkmode()}>
       {isDark === true ? (
         <BsFillMoonFill size={20} />
       ) : (
