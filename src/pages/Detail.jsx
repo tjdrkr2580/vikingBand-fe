@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import study from "../assets/study.jpg";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fontBigger, fontBig } from "../utils/styles/mixins";
 import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
 import { useState } from "react";
@@ -66,11 +66,11 @@ const DetailForm = styled.div`
   }
   .title {
     ${fontBigger}
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
   .subject {
     ${fontBig}
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
   .date {
     font-size: 0.5rem;
@@ -79,7 +79,7 @@ const DetailForm = styled.div`
   .desc {
     max-width: 35%;
     margin: 0 auto;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
     font-size: 1.5rem;
     ${elipsis}
   }
@@ -112,13 +112,38 @@ const ButtonWrapper = styled.div`
     ${flexCenter};
     ${boxBorderRadius};
     font-size: 1.1rem;
+    cursor: pointer;
   }
 `;
 
 const Detail = () => {
+  //스터디 찜하기
   const [liked, setLiked] = useState(false);
   const handleLikeClick = () => {
     setLiked(!liked);
+    if (!liked) {
+      alert("찜한 스터디에 추가되었습니다.");
+    } else {
+      alert("찜한 스터디에서 삭제되었습니다.");
+    }
+  };
+
+  // 가입신청
+
+  const [registered, setRegistered] = useState(false);
+  const handleRegisterButton = () => {
+    setRegistered(!registered);
+    if (!registered) {
+      alert("가입 신청 완료!");
+    } else {
+      alert("가입 신청 취소 완료!");
+    }
+  };
+
+  // 이전으로
+  const navigate = useNavigate();
+  const backToHomeHandler = () => {
+    navigate("/");
   };
 
   const posts = [
@@ -171,15 +196,19 @@ const Detail = () => {
           공부하실 분을 모집합니다. 알고리즘도 같이 공부해요!
         </p>
         <ButtonWrapper>
-          <button
-            className="LikeButton"
-            onClick={handleLikeClick}
-            aria-label="Like button"
-          >
-            <FaHeart size={28} fill={liked ? "red" : "none"} />
+          <button className="LikeButton" onClick={handleLikeClick}>
+            <FaHeart
+              size={28}
+              fill={liked ? "red" : "lightgray"}
+              className="HeartIcon"
+            />
           </button>
-          <button className="Button">가입 신청하기</button>
-          <button className="Button">이전으로</button>
+          <button className="Button" onClick={handleRegisterButton}>
+            {registered ? "가입 신청 취소" : "가입 신청하기"}
+          </button>
+          <button className="Button" onClick={backToHomeHandler}>
+            이전으로
+          </button>
         </ButtonWrapper>
       </DetailForm>
     </DetailWrapper>
