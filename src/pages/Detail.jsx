@@ -2,15 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import study from "../assets/study.jpg";
 import { useParams } from "react-router-dom";
-import {
-  fontMedium,
-  flexCenter,
-  boxBorderRadius,
-  elipsis,
-} from "../utils/styles/mixins";
+import { fontBigger, fontBig } from "../utils/styles/mixins";
+import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
+import { useState } from "react";
+import { FaHeart } from "react-icons/fa";
+import { css } from "styled-components";
 
 // 전체 감싸기
-const DetailWrapper = styled.section`
+const DetailWrapper = styled.div`
   min-height: 77.5vh;
   min-width: 100vw;
   display: flex;
@@ -19,12 +18,12 @@ const DetailWrapper = styled.section`
   margin: 30px auto;
   align-items: center;
   text-align: center;
+  overflow: auto;
 `;
 
 // img 위 작성자 id
 const CreatorBox = styled.div`
-  text-align: right;
-  margin-right: 100rem;
+  text-align: center;
   width: 100%;
   margin-bottom: 0.2rem;
 `;
@@ -35,43 +34,93 @@ const Image = styled.img`
   border-radius: 5px;
 `;
 
-//제목 , 주제, 날짜, 상세설명 순으로 스타일 적용.
+const elipsis = css`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+`;
+
+//작성인, 아이콘, 제목, 주제,날짜, 상세설명 순으로 스타일 적용.
 const DetailForm = styled.div`
-  padding: 0.6rem;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2rem;
+  .author {
+    font-size: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .Icon {
+    color: #d1d6e6;
+    width: 9rem;
+    height: 3.5rem;
+    padding: 0.4rem 0.6rem;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    background-color: ${(props) => props.theme.primary};
+    ${flexCenter};
+    ${boxBorderRadius};
+    font-size: 1.4rem;
+  }
   .title {
-    ${fontMedium}
+    ${fontBigger}
+    margin-bottom: 1rem;
   }
   .subject {
-    color: #d1d6e6;
-    max-width: 5rem;
+    ${fontBig}
+    margin-bottom: 1rem;
+  }
+  .date {
+    font-size: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .desc {
+    max-width: 35%;
+    margin: 0 auto;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    ${elipsis}
+  }
+  .LikeButton {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.4rem;
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    padding: 0;
+    color: ${(props) => props.theme.primary};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+`;
+const ButtonWrapper = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin: 0 auto;
+  .Button {
+    color: ${(props) => props.theme.primary};
+    max-width: 10rem;
     padding: 0.4rem 0.6rem;
-    background-color: ${(props) => props.theme.primary};
+    margin: 0 auto;
+    margin-bottom: 2rem;
+    background-color: ${(props) => props.theme.bgColor};
+    border: 1px solid ${(props) => props.theme.primary};
     ${flexCenter};
     ${boxBorderRadius};
     font-size: 1.1rem;
   }
-  .desc {
-    font-size: 1.05rem;
-    width: 100%;
-    ${elipsis}
-  }
-  .date {
-    font-size: 1.1rem;
-    font-weight: 500;
-  }
-  .author {
-    margin-top: 1.5rem;
-    font-size: 1.1rem;
-    display: flex;
-    font-weight: 500;
-    justify-content: flex-end;
-  }
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
 `;
 
 const Detail = () => {
+  const [liked, setLiked] = useState(false);
+  const handleLikeClick = () => {
+    setLiked(!liked);
+  };
+
   const posts = [
     {
       id: 22311,
@@ -94,19 +143,44 @@ const Detail = () => {
       modifiedAt: "2023-02-24T04:02:51.191694",
     },
   ];
+
   const { id } = useParams();
   const post = posts.find((post) => post.id === parseInt(id));
+
   return (
     <DetailWrapper>
-      <CreatorBox>Created by {post.author}</CreatorBox>
       <Image src={study} />
+      <CreatorBox></CreatorBox>
       <DetailForm>
-        <h1 className="title">{post.title}</h1>
-        <span className="subject">{post.subject}</span>
-        <p className="date">{new Date(post.createdAt).toLocaleString()}</p>
-        <p className="desc">
-          저희는 무슨무슨 스터디입니다, 저희는 어디어디에서 만날 것 입니다.
+        <p className="author">
+          Created by {post.author} at{" "}
+          {new Date(post.createdAt).toLocaleString()}{" "}
         </p>
+        <span className="Icon">스터디명</span>
+        <h1 className="title">{post.title}</h1>
+        <span className="Icon">카테고리</span>
+        <span className="subject">{post.subject}</span>
+        <span className="Icon">스터디 소개</span>
+        <p className="desc">
+          같이 리액트 공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이
+          리액트 공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
+          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
+          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
+          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
+          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
+          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요!
+        </p>
+        <ButtonWrapper>
+          <button
+            className="LikeButton"
+            onClick={handleLikeClick}
+            aria-label="Like button"
+          >
+            <FaHeart size={28} fill={liked ? "red" : "none"} />
+          </button>
+          <button className="Button">가입 신청하기</button>
+          <button className="Button">이전으로</button>
+        </ButtonWrapper>
       </DetailForm>
     </DetailWrapper>
   );
