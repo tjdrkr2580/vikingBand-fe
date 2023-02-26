@@ -52,7 +52,6 @@ const PostList = styled.li`
     ${boxBorderRadius}
     object-fit: cover;
   }
-
   ${boxBorderRadius}
   transition: 0.25s transform;
   &:hover {
@@ -68,12 +67,11 @@ const PostForm = styled.section`
   }
   .subject {
     color: #d1d6e6;
-    max-width: 5rem;
+    width: fit-content;
     padding: 0.4rem 0.6rem;
     background-color: ${(props) => props.theme.primary};
-    ${flexCenter};
     ${boxBorderRadius};
-    font-size: 1.1rem;
+    font-size: 1.05rem;
   }
   .desc {
     font-size: 1.05rem;
