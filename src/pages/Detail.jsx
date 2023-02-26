@@ -7,8 +7,6 @@ import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { css } from "styled-components";
-
-
 // 전체 감싸기
 const DetailWrapper = styled.div`
   min-height: 77.5vh;
@@ -21,7 +19,6 @@ const DetailWrapper = styled.div`
   text-align: center;
   overflow: auto;
 `
-
 // img 위 작성자 id
 const CreatorBox = styled.div`
   text-align: center;
@@ -34,7 +31,6 @@ const Image = styled.img`
   max-height: 25%;
   border-radius: 5px;
 `
-
 const elipsis = css`
   overflow: hidden;
   text-overflow: ellipsis;
@@ -42,8 +38,7 @@ const elipsis = css`
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
 `;
-
-//작성인, 아이콘, 제목, 주제,날짜, 상세설명 순으로 스타일 적용. 
+//작성인, 아이콘, 제목, 주제,날짜, 상세설명 순으로 스타일 적용.
 const DetailForm = styled.div`
   padding: 0.5rem;
   display: flex;
@@ -54,7 +49,7 @@ const DetailForm = styled.div`
     margin-bottom: 2rem;
   }
   .Icon {
-    color: #d1d6e6;
+    color: #D1D6E6;
     width: 9rem;
     height: 3.5rem;
     padding: 0.4rem 0.6rem;
@@ -63,7 +58,7 @@ const DetailForm = styled.div`
     background-color: ${(props) => props.theme.primary};
     ${flexCenter};
     ${boxBorderRadius};
-    font-size: 1.4rem; 
+    font-size: 1.4rem;
   }
   .title {
     ${fontBigger}
@@ -113,34 +108,27 @@ const ButtonWrapper = styled.div`
     ${flexCenter};
     ${boxBorderRadius};
     font-size: 1.1rem;
-    cursor: pointer; 
+    cursor: pointer;
   }
 `
-
-
 const Detail = () => {
-
-//스터디 찜하기 
+//스터디 찜하기
 const [liked, setLiked] = useState(false);
 const handleLikeClick = () => {
   setLiked(!liked);
   if (!liked) {alert ('찜한 스터디에 추가되었습니다.')} else {alert ('찜한 스터디에서 삭제되었습니다.')}
 };
-
-// 가입신청 
-
+// 가입신청
 const [registered, setRegistered] = useState(false)
 const handleRegisterButton = () => {
   setRegistered(!registered)
   if (!registered) {alert ('가입 신청 완료!')} else {alert ('가입 신청 취소 완료!')}
 }
-
-  // 이전으로 
+  // 이전으로
   const navigate = useNavigate()
   const backToHomeHandler = () => {
     navigate('/')
   }
-
   const posts = [
     {
       id: 22311,
@@ -163,14 +151,10 @@ const handleRegisterButton = () => {
       modifiedAt: "2023-02-24T04:02:51.191694",
     },
   ];
-
   const { id } = useParams();
   const post = posts.find(post => post.id === parseInt(id));
-  
-
   return (
     <DetailWrapper>
-      
       <Image src={study} />
       <CreatorBox></CreatorBox>
       <DetailForm>
@@ -182,16 +166,16 @@ const handleRegisterButton = () => {
               <span className="Icon">스터디 소개</span>
               <p className="desc">
                 같이 리액트 공부하실 분을 모집합니다.
-                알고리즘도 같이 공부해요!     
+                알고리즘도 같이 공부해요!
                 같이 리액트 공부하실 분을 모집합니다.
                 알고리즘도 같이 공부해요! 같이 리액트 공부하실 분을 모집합니다.
                 알고리즘도 같이 공부해요!
                 같이 리액트 공부하실 분을 모집합니다.
                 알고리즘도 같이 공부해요! 같이 리액트 공부하실 분을 모집합니다.
-                알고리즘도 같이 공부해요!       
+                알고리즘도 같이 공부해요!
                 같이 리액트 공부하실 분을 모집합니다.
                 알고리즘도 같이 공부해요! 같이 리액트 공부하실 분을 모집합니다.
-                알고리즘도 같이 공부해요!                   
+                알고리즘도 같이 공부해요!
               </p>
               <ButtonWrapper>
               <button className="LikeButton" onClick={handleLikeClick}>
@@ -206,5 +190,4 @@ const handleRegisterButton = () => {
       </DetailWrapper>
   );
 };
-
 export default Detail;
