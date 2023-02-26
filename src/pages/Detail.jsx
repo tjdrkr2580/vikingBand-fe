@@ -8,7 +8,6 @@ import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { css } from "styled-components";
 
-
 // 전체 감싸기
 const DetailWrapper = styled.div`
   min-height: 77.5vh;
@@ -123,7 +122,6 @@ const [liked, setLiked] = useState(false);
 const handleLikeClick = () => {
   setLiked(!liked);
 };
-
   const posts = [
     {
       id: 22311,
