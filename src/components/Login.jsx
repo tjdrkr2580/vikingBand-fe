@@ -5,10 +5,15 @@ import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import Button from "../element/Button";
 import { modalVariants } from "../utils/animations/variants";
-import { isModalState } from "../utils/recoil/atoms";
+import {
+  isModalState,
+  isUserState,
+  userInfoState,
+} from "../utils/recoil/atoms";
 import { boxBorderRadius, flexCenter } from "../utils/styles/mixins";
 import { addNewUser, loginUser } from "../utils/axios/axios";
 import { useMutation } from "react-query";
+import { useCookies } from "react-cookie";
 
 const ModalWrapper = styled.section`
   position: absolute;
@@ -79,38 +84,38 @@ const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
   const modalRef = useRef(null);
   const setVisible = useSetRecoilState(isModalState);
+  const setUserInfo = useSetRecoilState(userInfoState);
+  const setIsUser = useSetRecoilState(isUserState);
   const {
     register,
     formState: { errors },
     handleSubmit,
     reset,
   } = useForm();
-
-  
-
+  const [cookies, setCookie] = useCookies();
   const registerMutation = useMutation((newUser) => addNewUser(newUser));
-
-  const loginMutation = useMutation((User)=> loginUser(User))
-
+  const loginMutation = useMutation((User) => loginUser(User));
   const onSubmit = async (data) => {
     if (isRegister !== true) {
       const User = {
         username: data.userId,
         password: data.password,
       };
-
-     const response = await loginMutation.mutateAsync(User)
-     console.log(response)
-
+      const res = await loginMutation.mutateAsync(User);
+      await setCookie("viking-band-token", res.headers.authorization);
+      setUserInfo(res.data.data);
+      console.log(res.data);
+      setIsUser(true);
+      setVisible(false);
     } else {
       const newUser = {
         username: data.userId,
         email: data.email,
         password: data.password,
       };
-
       const response = await registerMutation.mutateAsync(newUser);
-      console.log(response);
+      setIsRegister(false);
+      reset();
     }
   };
 

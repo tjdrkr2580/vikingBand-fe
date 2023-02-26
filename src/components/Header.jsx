@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useRef } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import ToggleMode from "../element/ToggleMode";
 import { isModalState, isUserState } from "../utils/recoil/atoms";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   boxBorderRadius,
   circleBorderRadius,
@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import unnamed from "../assets/unname.jpg";
 import Button from "../element/Button";
+import { useCookies } from "react-cookie";
 
 const MainLogo = styled.h1`
   cursor: pointer;
@@ -89,20 +90,21 @@ const DropdownMenuItem = styled.li`
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(isUserState);
-
+  const [etc, etc2, removeCookie] = useCookies();
   const homeWrapperRef = useRef(null);
+  const navigate = useNavigate();
 
   const handleHeaderButtonClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   const handleLogout = () => {
+    removeCookie("viking-band-token");
     setIsLoggedIn(false);
+    window.location.reload();
   };
 
   const setVisible = useSetRecoilState(isModalState);
-
-  const navigate = useNavigate()
 
   return (
     <HeaderWrapper
@@ -114,7 +116,9 @@ const Header = () => {
         }
       }}
     >
-      <MainLogo>Viking Band</MainLogo>
+      <Link to="/">
+        <MainLogo>Viking Band</MainLogo>
+      </Link>
       <StButtons>
         <ToggleMode />
         {isLoggedIn ? (
@@ -122,7 +126,9 @@ const Header = () => {
             <HeaderButton onClick={handleHeaderButtonClick} src={unnamed} />
             {isDropdownOpen && (
               <DropdownMenu>
-                <DropdownMenuItem onClick={navigate('/profile')}>프로필</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate("/profile")}>
+                  프로필
+                </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   로그아웃
                 </DropdownMenuItem>

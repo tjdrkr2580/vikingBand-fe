@@ -15,3 +15,8 @@ export const isModalState = atom({
   key: `state${v1()}`,
   default: false,
 });
+
+export const userInfoState = atom({
+  key: `state${v1()}`,
+  default: undefined,
+});
