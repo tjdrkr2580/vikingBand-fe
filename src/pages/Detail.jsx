@@ -31,6 +31,14 @@ const Image = styled.img`
   max-height: 25%;
   border-radius: 5px;
 `;
+
+const elipsis = css`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+`;
 const elipsis = css`
   overflow: hidden;
   text-overflow: ellipsis;
@@ -159,8 +167,10 @@ const Detail = () => {
       modifiedAt: "2023-02-24T04:02:51.191694",
     },
   ];
+
   const { id } = useParams();
   const post = posts.find((post) => post.id === parseInt(id));
+
   return (
     <DetailWrapper>
       <Image src={study} />
