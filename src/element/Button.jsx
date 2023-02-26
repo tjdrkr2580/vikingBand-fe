@@ -27,8 +27,9 @@ const CustomButton = styled.button`
     ${(props) =>
     props.wh === "l" &&
     css`
-      width: 10rem;
-      height: 4.5rem;
+      width: 9rem;
+      height: 4rem;
+      font-size: 1.4rem;
     `}
     ${boxBorderRadius}
 `;

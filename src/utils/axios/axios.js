@@ -16,10 +16,12 @@ export const loginUser = async (User) => {
 export const addNewUser = async (newUser) => {
   const response = await axios.post(
     `${API_BASE_URL}/api/members/signup`,
-    newUser,
-    {
-      withCredentials: true,
-    }
+    newUser
   );
+  return response;
+};
+
+export const addNewStudy = async (newStudy) => {
+  const response = await axios.post(`${API_BASE_URL}/api/studies`, newStudy);
   return response;
 };
