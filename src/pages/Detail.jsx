@@ -39,13 +39,6 @@ const elipsis = css`
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
 `;
-const elipsis = css`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-`;
 //작성인, 아이콘, 제목, 주제,날짜, 상세설명 순으로 스타일 적용.
 const DetailForm = styled.div`
   padding: 0.5rem;
