@@ -14,7 +14,8 @@ import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { useMutation, useQuery } from "react-query";
-import { getStudy, postStudyWish } from "../utils/axios/axios";
+import { getStudy, postStudyRegist, postStudyWish } from "../utils/axios/axios";
+import Button from "../element/Button";
 
 const DetailWrapper = styled.div`
   min-width: 100vw;
@@ -110,20 +111,27 @@ const Detail = () => {
   const backToHomeHandler = () => {
     navigate("/");
   };
-  // const { data } = useQuery("studies", getStudies);
-  // const posts = data.data.data;
-  // const post = posts.find((post) => post.studyId === parseInt(id));
+  
   const { id } = useParams();
 
+  // 원하는 아이디의 스터디 정보를 가져옴
   const { isLoading, data } = useQuery("study", () => getStudy(id));
   if (isLoading === false) console.log(data.data);
+  
 
   const wishMutate = useMutation((id) => postStudyWish(id));
 
+  // 하트 누른 게시글의 아이디 정보 담아서 post 요청 보냄
   const onWish = async (id) => {
     const res = await wishMutate.mutateAsync(id);
     console.log(res);
   };
+
+  const registerMutate = useMutation((id) => postStudyRegist(id) )
+
+  const onRegister = async (id) => {
+    const res = await registerMutate.mutateAsync(id)
+  }
 
   return (
     <DetailWrapper>
@@ -148,6 +156,9 @@ const Detail = () => {
             </ContentWrapper>
           </ImgWrapper>
           <OneLineDesc>{data.data.content}</OneLineDesc>
+          <Button
+            onClick = {() => onRegister(data.data.studyId)}
+          >가입 신청</Button>
         </>
       )}
     </DetailWrapper>
