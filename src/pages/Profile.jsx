@@ -249,6 +249,7 @@ const ManagedStudy = () => {
   //스터디 정보 갖고오기 
   const { data } = useQuery("studies", getStudies);
   const membersInfo = data.data.data
+  console.log(membersInfo)
 
   //스터디에 적힌 작성자 memberName과 유저의 memberName 비교 
   const posts = membersInfo.filter(info => info.author.memberName === userInfo.memberName);
