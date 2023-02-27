@@ -1,18 +1,17 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { pageMargin } from "../utils/styles/mixins";
 import {
   boxBorderRadius,
   fontMedium,
   flexCenter,
   elipsis,
+  pageMargin,
+  circleBorderRadius,
 } from "../utils/styles/mixins";
 import study from "../assets/study.jpg";
 import { useQuery } from "react-query";
 import { getStudies, getUserDetailInfo } from "../utils/axios/axios";
 import unnamed from "../assets/unname.png";
-import { circleBorderRadius } from "../utils/styles/mixins";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "../utils/recoil/atoms";
 
@@ -165,7 +164,7 @@ const NavBar = ({ selectedPage, setSelectedPage }) => {
   );
 };
 
-// 좋아요 한 페이지
+// 찜한 스터디
 const FavoriteStudy = () => {
   
   const userInfo = useRecoilValue(userInfoState);
@@ -198,6 +197,7 @@ const FavoriteStudy = () => {
     </ListWrapper>
   );
 };
+
 
 // 신청한 스터디
 const AppliedStudy = () => {
