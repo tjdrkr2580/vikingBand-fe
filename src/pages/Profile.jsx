@@ -167,33 +167,30 @@ const NavBar = ({ selectedPage, setSelectedPage }) => {
 
 // 좋아요 한 페이지
 const FavoriteStudy = () => {
-  const posts = [
-    {
-      id: 2,
-      userId: 2,
-      author: "teste2r",
-      title: "영어공부",
-      subject: "주제2",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-  ];
+  
+  const userInfo = useRecoilValue(userInfoState);
+  const { data } = useQuery("detailInfo", () =>
+    getUserDetailInfo(userInfo.id)
+  );
+  const allPosts = data.data.myStudyWishes
+  const posts = allPosts.filter((post, index, self) =>
+  index === self.findIndex((p) => p.studyId === post.studyId)
+  );
 
   return (
     <ListWrapper>
       <PostLists>
         {posts.map((post, i) => (
           <PostList key={i}>
-            <img src={study} alt={post.title} />
+            <img src={study}alt={post.title}/>
             <PostForm>
               <h1 className="title">{post.title}</h1>
               <span className="subject">{post.subject}</span>
               <p className="desc">스터디 소개 문구</p>
               <p className="date">
-                {new Date(post.createdAt).toLocaleString()}
+                {new Date(post.author.createdAt).toLocaleString()}
               </p>
-              <span className="author">작성자 : {post.author}</span>
+              <span className="author">작성자 : {post.author.memberName}</span>
             </PostForm>
           </PostList>
         ))}
@@ -204,18 +201,15 @@ const FavoriteStudy = () => {
 
 // 신청한 스터디
 const AppliedStudy = () => {
-  const posts = [
-    {
-      id: 2,
-      userId: 2,
-      author: "teste2r",
-      title: "리액트공부",
-      subject: "리액트쿼리",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-  ];
+  
+  const userInfo = useRecoilValue(userInfoState);
+  const { data } = useQuery("detailInfo", () =>
+    getUserDetailInfo(userInfo.id)
+  );
+  const allPosts = data.data.myStudyRegists
+  const posts = allPosts.filter((post, index, self) =>
+  index === self.findIndex((p) => p.studyId === post.studyId)
+  );
 
   return (
     <ListWrapper>
@@ -228,9 +222,9 @@ const AppliedStudy = () => {
               <span className="subject">{post.subject}</span>
               <p className="desc">스터디 소개 문구</p>
               <p className="date">
-                {new Date(post.createdAt).toLocaleString()}
+                {new Date(post.author.createdAt).toLocaleString()}
               </p>
-              <span className="author">작성자 : {post.author}</span>
+              <span className="author">작성자 : {post.author.memberName}</span>
             </PostForm>
           </PostList>
         ))}
@@ -281,9 +275,7 @@ const Profile = () => {
   const { isLoading, data } = useQuery("detailInfo", () =>
     getUserDetailInfo(userInfo.id)
   );
-  if (isLoading === false) {
-    console.log(data);
-  }
+
   return (
     <>
       <ListWrapper>

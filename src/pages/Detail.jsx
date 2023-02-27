@@ -163,6 +163,7 @@ const Detail = () => {
 
   const wishMutate = useMutation((id) => postStudyWish(id));
 
+  // 하트 누른 게시글의 아이디 정보 담아서 post 요청 보냄
   const onWish = async (id) => {
     try {
       const res = await wishMutate.mutateAsync(id, {
@@ -177,6 +178,12 @@ const Detail = () => {
 
   const onBoard = async (data) => {
     console.log(data);
+  };
+
+  const registerMutate = useMutation((id) => postStudyRegist(id));
+
+  const onRegister = async (id) => {
+    const res = await registerMutate.mutateAsync(id);
   };
 
   return (
