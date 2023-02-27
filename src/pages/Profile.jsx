@@ -10,7 +10,7 @@ import {
 } from "../utils/styles/mixins";
 import study from "../assets/study.jpg";
 import { useQuery } from "react-query";
-import { getStudies } from "../utils/axios/axios";
+import { getStudies, getUserDetailInfo } from "../utils/axios/axios";
 import unnamed from "../assets/unname.png";
 import { circleBorderRadius } from "../utils/styles/mixins";
 import { useRecoilValue } from "recoil";
@@ -278,17 +278,26 @@ const ManagedStudy = () => {
 const Profile = () => {
   const userInfo = useRecoilValue(userInfoState);
   const [selectedPage, setSelectedPage] = useState("찜한 스터디");
-
+  const { isLoading, data } = useQuery("detailInfo", () =>
+    getUserDetailInfo(userInfo.id)
+  );
   return (
     <>
       <ListWrapper>
         <ProfileWrapper>
           <ProfileIcon src={unnamed} /> {userInfo.memberName}
         </ProfileWrapper>
-        <NavBar selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
-        {selectedPage === "찜한 스터디" && <FavoriteStudy />}
-        {selectedPage === "신청한 스터디" && <AppliedStudy />}
-        {selectedPage === "내 스터디 관리" && <ManagedStudy />}
+        {isLoading === false && (
+          <>
+            <NavBar
+              selectedPage={selectedPage}
+              setSelectedPage={setSelectedPage}
+            />
+            {selectedPage === "찜한 스터디" && <FavoriteStudy props={data} />}
+            {selectedPage === "신청한 스터디" && <AppliedStudy props={data} />}
+            {selectedPage === "내 스터디 관리" && <ManagedStudy props={data} />}
+          </>
+        )}
       </ListWrapper>
     </>
   );

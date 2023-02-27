@@ -26,3 +26,8 @@ export const getStudy = async (id) => {
   const response = await axios.get(`/api/studies/${id}`);
   return response.data;
 };
+
+export const getUserDetailInfo = async (id) => {
+  const response = await axios.get(`/api/members/details/${id}`);
+  return response.data;
+};

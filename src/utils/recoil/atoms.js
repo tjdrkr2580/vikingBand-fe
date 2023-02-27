@@ -32,3 +32,8 @@ export const studyModalState = atom({
   key: `state${v1()}`,
   default: false,
 });
+
+export const userDetailInfo = atom({
+  key: `state${v1()}`,
+  default: undefined,
+});

@@ -131,7 +131,7 @@ const Home = () => {
                   {new Date(post.createdAt).toLocaleString()}
                 </p>
                 <section className="post-bottom">
-                  <AiFillHeart size={22} />
+                  <AiFillHeart size={22} color="FF597B" />
                   <span className="author">
                     작성자 : {post.author.memberName}
                   </span>

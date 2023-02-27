@@ -13,11 +13,7 @@ import {
 import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { css } from "styled-components";
 import { useQuery } from "react-query";
-import { getStudy } from "../utils/axios/axios";
-import { getStudies } from "../utils/axios/axios";
-import { applyStudies } from "../utils/axios/axios";
 import { getStudy } from "../utils/axios/axios";
 
 const DetailWrapper = styled.div`
