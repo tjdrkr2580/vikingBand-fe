@@ -281,6 +281,9 @@ const Profile = () => {
   const { isLoading, data } = useQuery("detailInfo", () =>
     getUserDetailInfo(userInfo.id)
   );
+  if (isLoading === false) {
+    console.log(data);
+  }
   return (
     <>
       <ListWrapper>

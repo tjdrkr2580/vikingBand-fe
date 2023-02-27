@@ -13,8 +13,8 @@ import {
 import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { useQuery } from "react-query";
-import { getStudy } from "../utils/axios/axios";
+import { useMutation, useQuery } from "react-query";
+import { getStudy, postStudyWish } from "../utils/axios/axios";
 
 const DetailWrapper = styled.div`
   min-width: 100vw;
@@ -88,7 +88,6 @@ const OneLineDesc = styled.section`
 `;
 
 const Detail = () => {
-  //스터디 찜하기
   const [liked, setLiked] = useState(false);
   const handleLikeClick = () => {
     setLiked(!liked);
@@ -98,7 +97,6 @@ const Detail = () => {
       alert("찜한 스터디에서 삭제되었습니다.");
     }
   };
-  // 가입신청
   const [registered, setRegistered] = useState(false);
   const handleRegisterButton = (studyId) => {
     setRegistered(!registered);
@@ -108,7 +106,6 @@ const Detail = () => {
       alert("가입 신청 취소 완료!");
     }
   };
-  // 이전으로
   const navigate = useNavigate();
   const backToHomeHandler = () => {
     navigate("/");
@@ -120,6 +117,14 @@ const Detail = () => {
 
   const { isLoading, data } = useQuery("study", () => getStudy(id));
   if (isLoading === false) console.log(data.data);
+
+  const wishMutate = useMutation((id) => postStudyWish(id));
+
+  const onWish = async (id) => {
+    const res = await wishMutate.mutateAsync(id);
+    console.log(res);
+  };
+
   return (
     <DetailWrapper>
       {isLoading === false && data !== undefined && (
@@ -133,7 +138,11 @@ const Detail = () => {
                 <li>{new Date(data.data.createdAt).toLocaleString()}</li>
               </SubTitles>
               <IconsLayout>
-                <FaHeart color="FF597B" size="18" />
+                <FaHeart
+                  color="FF597B"
+                  size="18"
+                  onClick={() => onWish(data.data.studyId)}
+                />
                 <span>{data.data.likes}</span>
               </IconsLayout>
             </ContentWrapper>
