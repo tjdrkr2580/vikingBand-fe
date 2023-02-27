@@ -4,7 +4,12 @@ import styled from "styled-components";
 import { pageMargin } from "../utils/styles/mixins";
 import { boxBorderRadius, fontMedium, flexCenter, elipsis } from "../utils/styles/mixins";
 import study from "../assets/study.jpg";
-
+import { useQuery } from "react-query";
+import { getStudies } from "../utils/axios/axios";
+import unnamed from "../assets/unname.png";
+import { circleBorderRadius } from "../utils/styles/mixins";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "../utils/recoil/atoms";
 
 // 전체 페이지 감싸기
 const ListWrapper = styled.section`
@@ -14,6 +19,48 @@ const ListWrapper = styled.section`
   flex-direction: column;
   ${pageMargin}
 `
+
+//네비게이션 상단 프로필사진 + 유저 ID
+const ProfileWrapper = styled.div`
+margin: 0 auto;
+text-align: center;
+justify-content: space-around;
+gap: 1.5rem;
+align-items: center;
+font-size: 5rem;
+display: flex;
+`
+
+const ProfileIcon = styled.img`
+  cursor: pointer;
+  width: 6rem;
+  height: 6rem;
+  ${circleBorderRadius}
+  object-fit: cover;
+`;
+
+// 네비게이션 스타일링
+const Navigation = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  background-color: #F5F5F5;
+  padding: 1rem;
+  border-radius: 10px;
+  gap: 20px;
+  .sectionText {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin: 0 1rem;
+    cursor: pointer;
+    color: #555;
+    &.selected {
+      color: red;
+    }
+  }
+`
+
+
 //스터디 모음 틀 스타일링
 const PostLists = styled.ul`
   display: grid;
@@ -51,10 +98,15 @@ const PostForm = styled.section`
   border: 2px solid ${(props) => props.theme.primary};
   border-radius: 5px;
   padding: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  height: 55%;
   .title {
     ${fontMedium};
     text-align: center;
     margin-top: 1rem;
+    margin-bottom: 0.5rem;
   }
   .subject {
     color : ${(props) => props.theme.bgColor};
@@ -63,12 +115,14 @@ const PostForm = styled.section`
     ${flexCenter};
     ${boxBorderRadius};
     font-size: 1.1rem;
+    margin-bottom: 0.5rem;
   }
   .desc {
     font-size: 1.05rem;
     width: 100%;
     text-align: center;
     font-size: 1.0rem;
+    margin-bottom: 1rem;
     ${elipsis}
   }
   .date {
@@ -84,45 +138,9 @@ const PostForm = styled.section`
     font-weight: 500;
     justify-content: flex-end;
   }
-  .button {
-    color : ${(props) => props.theme.primary};
-    background-color: ${(props) => props.theme.bgColor};
-    max-width: 4.2rem;
-    margin-top: 1.5rem;
-    font-size: 1.0rem;
-    display: flex;
-    font-weight: 500;
-    justify-content: flex-end;
-    align-self: flex-end;
-    border-radius: 2rem;
-    border: 1px solid ${(props) => props.theme.primary};
-    padding: 0.2rem 0.3rem;
-  }
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
 `;
 
-// 네비게이션 스타일링
-const Navigation = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-  background-color: #F5F5F5;
-  padding: 1rem;
-  border-radius: 10px;
-  gap: 20px;
-  .sectionText {
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin: 0 1rem;
-    cursor: pointer;
-    color: #555;
-    &.selected {
-      color: red;
-    }
-  }
-`
+
 // 네비게이션 동작원리 
 const NavBar = ({ selectedPage, setSelectedPage }) => {
   const sections = ["찜한 스터디", "신청한 스터디", "내 스터디 관리"];
@@ -153,26 +171,6 @@ const FavoriteStudy = () => {
       author: "teste2r",
       title: "영어공부",
       subject: "주제2",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-    {
-      id: 2,
-      userId: 2,
-      author: "qqwe123",
-      title: "부동산",
-      subject: "주제2",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-    {
-      id: 2,
-      userId: 2,
-      author: "vccvb123",
-      title: "공인중개사",
-      subject: "주제1",
       imageUrl: null,
       createdAt: "2023-02-24T04:02:51.191694",
       modifiedAt: "2023-02-24T04:02:51.191694",
@@ -215,26 +213,6 @@ const AppliedStudy = () => {
       imageUrl: null,
       createdAt: "2023-02-24T04:02:51.191694",
       modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-    {
-      id: 2,
-      userId: 2,
-      author: "qqwe123",
-      title: "알고리즘",
-      subject: "JS알고리즘",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-    {
-      id: 2,
-      userId: 2,
-      author: "vccvb123",
-      title: "Next JS",
-      subject: "Next JS",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
     }
   ];
 
@@ -264,18 +242,16 @@ const AppliedStudy = () => {
 
 // 내 스터디 관리 
 const ManagedStudy = () => {
-  const posts = [
-    {
-      id: 2,
-      userId: 2,
-      author: "me",
-      title: "내가 만든 스터디",
-      subject: "프론트엔드",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-  ];
+  
+  //유저정보 가져오기
+  const userInfo = useRecoilValue(userInfoState)
+
+  //스터디 정보 갖고오기 
+  const { data } = useQuery("studies", getStudies);
+  const membersInfo = data.data.data
+
+  //스터디에 적힌 작성자 memberName과 유저의 memberName 비교 
+  const posts = membersInfo.filter(info => info.author.memberName === userInfo.memberName);
 
   return (
     <ListWrapper>
@@ -286,13 +262,10 @@ const ManagedStudy = () => {
             <PostForm>
               <h1 className="title">{post.title}</h1>
               <span className="subject">{post.subject}</span>
-              <p className="desc">
-                스터디 소개 문구
-              </p>
+              <p className="desc">스터디 소개 문구</p>
               <p className="date">
                 {new Date(post.createdAt).toLocaleString()}
               </p>
-              <button className="button"> 수정하기 </button>
             </PostForm>
           </PostList>
         ))}
@@ -303,11 +276,16 @@ const ManagedStudy = () => {
 
 // 조건부 렌더링
 const Profile = () => {
+
+  const userInfo = useRecoilValue(userInfoState)
   const [selectedPage, setSelectedPage] = useState("찜한 스터디");
 
   return (
     <>
       <ListWrapper>
+        <ProfileWrapper> 
+        <ProfileIcon src = {unnamed}/> {userInfo.memberName}
+        </ProfileWrapper>
         <NavBar selectedPage={selectedPage} setSelectedPage={setSelectedPage} />
         {selectedPage === "찜한 스터디" && <FavoriteStudy />}
         {selectedPage === "신청한 스터디" && <AppliedStudy />}
