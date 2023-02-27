@@ -40,7 +40,7 @@ export const circleBorderRadius = css`
 `;
 
 export const pageMargin = css`
-  margin-top: 9rem;
+  margin-top: 11rem;
 `;
 
 export const elipsis = css`

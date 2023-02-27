@@ -83,6 +83,7 @@ const PostForm = styled.section`
     font-weight: 500;
   }
   .post-bottom {
+    z-index: 997;
     display: flex;
     justify-content: space-between;
     align-items: center;

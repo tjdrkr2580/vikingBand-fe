@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { fontSmaller } from "../utils/styles/mixins";
 
 const StyledFooter = styled.footer`
-  position: relative;
   margin-top: 3rem;
   bottom: 0;
   left: 0;
