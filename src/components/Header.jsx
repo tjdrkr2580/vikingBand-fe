@@ -90,6 +90,7 @@ const Header = () => {
     removeCookie("viking-band-token");
     setIsLoggedIn(false);
     window.location.reload();
+    navigate('/')
   };
 
   const setVisible = useSetRecoilState(isModalState);
