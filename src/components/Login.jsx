@@ -50,7 +50,7 @@ const Login = () => {
   const onSubmit = async (data) => {
     if (isRegister !== true) {
       const User = {
-        username: data.userId,
+        memberName: data.userId,
         password: data.password,
       };
       const res = await loginMutation.mutateAsync(User);
@@ -62,7 +62,7 @@ const Login = () => {
       setVisible(false);
     } else {
       const newUser = {
-        username: data.userId,
+        memberName: data.userId,
         email: data.email,
         password: data.password,
       };
