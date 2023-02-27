@@ -2,117 +2,96 @@ import React from "react";
 import styled from "styled-components";
 import study from "../assets/study.jpg";
 import { useNavigate, useParams } from "react-router-dom";
-import { fontBigger, fontBig } from "../utils/styles/mixins";
+import {
+  fontBigger,
+  fontBig,
+  pageMargin,
+  fontMedium,
+  fontSmall,
+  fontSmaller,
+} from "../utils/styles/mixins";
 import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { css } from "styled-components";
 import { useQuery } from "react-query";
+import { getStudy } from "../utils/axios/axios";
 import { getStudies } from "../utils/axios/axios";
 import { applyStudies } from "../utils/axios/axios";
+import { getStudy } from "../utils/axios/axios";
 
-// 전체 감싸기
 const DetailWrapper = styled.div`
-  min-height: 77.5vh;
   min-width: 100vw;
-  display: flex;
+  ${flexCenter}
   flex-direction: column;
-  justify-content: center;
-  margin: 30px auto;
+  ${pageMargin}
+`;
+
+const ImgWrapper = styled.section`
+  width: 97.5%;
+  position: relative;
+  height: 25rem;
+  img {
+    ${boxBorderRadius}
+    width: 100%;
+    height: 100%;
+    filter: brightness(55%);
+    vertical-align: middle;
+    object-fit: cover;
+  }
+`;
+
+const ContentWrapper = styled.section`
+  z-index: 997;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  ${flexCenter}
+  flex-direction: column;
+  gap: 1rem;
+
+  h1 {
+    color: white;
+    font-size: 2.8rem;
+  }
+
+  p {
+    color: white;
+    ${fontSmall}
+  }
+`;
+
+const SubTitles = styled.ul`
+  display: flex;
+  gap: 1.5rem;
   align-items: center;
-  text-align: center;
-  overflow: auto;
-`;
-
-// img
-const Image = styled.img`
-  max-width: 35%;
-  max-height: 25%;
-  border-radius: 5px;
-`;
-
-const elipsis = css`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 5;
-  -webkit-box-orient: vertical;
-`;
-//작성인, 아이콘, 제목, 주제,날짜, 상세설명 순으로 스타일 적용.
-const DetailForm = styled.div`
-  padding: 0.5rem;
-  display: flex;
   flex-direction: column;
-  margin-bottom: 2rem;
-  .author {
-    font-size: 0.5rem;
-    margin-bottom: 2rem;
-  }
-  .Icon {
-    color: #d1d6e6;
-    width: 9rem;
-    height: 3.5rem;
-    padding: 0.4rem 0.6rem;
-    margin: 0 auto;
-    margin-bottom: 2rem;
-    background-color: ${(props) => props.theme.primary};
-    ${flexCenter};
-    ${boxBorderRadius};
-    font-size: 1.4rem;
-  }
-  .title {
-    ${fontBigger}
-    margin-bottom: 2rem;
-  }
-  .subject {
-    ${fontBig}
-    margin-bottom: 2rem;
-  }
-  .date {
-    font-size: 0.5rem;
-    margin-bottom: 1rem;
-  }
-  .desc {
-    max-width: 35%;
-    margin: 0 auto;
-    margin-bottom: 3rem;
-    font-size: 1.5rem;
-    ${elipsis}
-  }
-  .LikeButton {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 1.4rem;
-    margin: 0 auto;
-    margin-bottom: 2rem;
-    padding: 0;
-    color: ${(props) => props.theme.primary};
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  li {
+    color: white;
+    width: fit-content;
+    ${fontSmaller}
   }
 `;
-const ButtonWrapper = styled.div`
+
+const IconsLayout = styled.div`
   display: flex;
   gap: 1rem;
-  margin: 0 auto;
-  .Button {
-    color: ${(props) => props.theme.primary};
-    max-width: 10rem;
-    padding: 0.4rem 0.6rem;
-    margin: 0 auto;
-    margin-bottom: 2rem;
-    background-color: ${(props) => props.theme.bgColor};
-    border: 1px solid ${(props) => props.theme.primary};
-    ${flexCenter};
-    ${boxBorderRadius};
-    font-size: 1.1rem;
-    cursor: pointer;
+  align-items: center;
+  color: white;
+  span {
+    ${fontSmaller}
+    padding-bottom: 0.2rem;
   }
 `;
-const Detail = () => {
 
+const OneLineDesc = styled.section`
+  height: 20rem;
+  ${flexCenter}
+  ${fontSmall}
+`;
+
+const Detail = () => {
   //스터디 찜하기
   const [liked, setLiked] = useState(false);
   const handleLikeClick = () => {
@@ -126,10 +105,6 @@ const Detail = () => {
   // 가입신청
   const [registered, setRegistered] = useState(false);
   const handleRegisterButton = (studyId) => {
-    
-    
-    
-    
     setRegistered(!registered);
     if (!registered) {
       alert("가입 신청 완료!");
@@ -142,55 +117,34 @@ const Detail = () => {
   const backToHomeHandler = () => {
     navigate("/");
   };
-
-  //모든 스터디 정보 갖고오기 
-  const { data } = useQuery("studies", getStudies);
-  const posts = data.data.data
-
-  // 상세페이지 url의 parameter 정보 갖다쓰기 
+  // const { data } = useQuery("studies", getStudies);
+  // const posts = data.data.data;
+  // const post = posts.find((post) => post.studyId === parseInt(id));
   const { id } = useParams();
-  const post = posts.find((post) => post.studyId === parseInt(id));
-  
 
-  // 정보를 받아와서 내가 원하는 방식대로 화면에 뿌려주기
+  const { isLoading, data } = useQuery("study", () => getStudy(id));
+  if (isLoading === false) console.log(data.data);
   return (
     <DetailWrapper>
-      <Image src={study} />
-      <DetailForm>
-        <p className="author">
-          Created by {post.author.memberName} at{" "}
-          {new Date(post.createdAt).toLocaleString()}{" "}
-        </p>
-        <span className="Icon">스터디명</span>
-        <h1 className="title">{post.title}</h1>
-        <span className="Icon">카테고리</span>
-        <span className="subject">{post.subject}</span>
-        <span className="Icon">스터디 소개</span>
-        <p className="desc">
-          같이 리액트 공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이
-          리액트 공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
-          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
-          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
-          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
-          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요! 같이 리액트
-          공부하실 분을 모집합니다. 알고리즘도 같이 공부해요!
-        </p>
-        <ButtonWrapper>
-          <button className="LikeButton" onClick={handleLikeClick}>
-            <FaHeart
-              size={28}
-              fill={liked ? "red" : "lightgray"}
-              className="HeartIcon"
-            />
-          </button>
-          <button className="Button" onClick={handleRegisterButton}>
-            {registered ? "가입 신청 취소" : "가입 신청하기"}
-          </button>
-          <button className="Button" onClick={backToHomeHandler}>
-            이전으로
-          </button>
-        </ButtonWrapper>
-      </DetailForm>
+      {isLoading === false && data !== undefined && (
+        <>
+          <ImgWrapper>
+            <img src={study} alt="study" />
+            <ContentWrapper>
+              <h1>{data.data.title}</h1>
+              <SubTitles>
+                <li>{data.data.author.memberName}</li>
+                <li>{new Date(data.data.createdAt).toLocaleString()}</li>
+              </SubTitles>
+              <IconsLayout>
+                <FaHeart color="FF597B" size="18" />
+                <span>{data.data.likes}</span>
+              </IconsLayout>
+            </ContentWrapper>
+          </ImgWrapper>
+          <OneLineDesc>{data.data.content}</OneLineDesc>
+        </>
+      )}
     </DetailWrapper>
   );
 };
