@@ -101,7 +101,7 @@ const Detail = () => {
   };
   // 가입신청
   const [registered, setRegistered] = useState(false);
-  const handleRegisterButton = (studyId) => {
+  const handleRegisterButton = () => {
     setRegistered(!registered);
     if (!registered) {
       alert("가입 신청 완료!");
