@@ -148,7 +148,8 @@ const Detail = () => {
               <IconsLayout>
                 <FaHeart
                   color="FF597B"
-                  size="18"
+                  cursor="pointer"
+                  size="24"
                   onClick={() => onWish(data.data.studyId)}
                 />
                 <span>{data.data.likes}</span>
