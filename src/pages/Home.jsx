@@ -118,7 +118,7 @@ const Home = () => {
             <PostList
               key={i}
               onClick={() => {
-                navigateToPost(post.id);
+                navigateToPost(post.studyId);
               }}
             >
               <img src={test} alt={post.title} />

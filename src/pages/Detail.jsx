@@ -7,6 +7,9 @@ import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { css } from "styled-components";
+import { useQuery } from "react-query";
+import { getStudies } from "../utils/axios/axios";
+
 // 전체 감싸기
 const DetailWrapper = styled.div`
   min-height: 77.5vh;
@@ -19,12 +22,7 @@ const DetailWrapper = styled.div`
   text-align: center;
   overflow: auto;
 `;
-// img 위 작성자 id
-const CreatorBox = styled.div`
-  text-align: center;
-  width: 100%;
-  margin-bottom: 0.2rem;
-`;
+
 // img
 const Image = styled.img`
   max-width: 35%;
@@ -113,6 +111,7 @@ const ButtonWrapper = styled.div`
   }
 `;
 const Detail = () => {
+
   //스터디 찜하기
   const [liked, setLiked] = useState(false);
   const handleLikeClick = () => {
@@ -138,39 +137,25 @@ const Detail = () => {
   const backToHomeHandler = () => {
     navigate("/");
   };
-  const posts = [
-    {
-      id: 22311,
-      userId: 2,
-      author: "vccvb123",
-      title: "리액트 공부해요!",
-      subject: "Front-End",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-    {
-      id: 2435,
-      userId: 2,
-      author: "bvcvcsd123",
-      title: "모각코",
-      subject: "Back-End",
-      imageUrl: null,
-      createdAt: "2023-02-24T04:02:51.191694",
-      modifiedAt: "2023-02-24T04:02:51.191694",
-    },
-  ];
 
+  //모든 스터디 정보 갖고오기 
+  const { data } = useQuery("studies", getStudies);
+  const posts = data.data.data
+  console.log(posts)
+
+  // 상세페이지 url의 parameter 정보 갖다쓰기 
   const { id } = useParams();
-  const post = posts.find((post) => post.id === parseInt(id));
+  console.log(useParams())
+  const post = posts.find((post) => post.studyId === parseInt(id));
+  
 
+  // 정보를 받아와서 내가 원하는 방식대로 화면에 뿌려주기
   return (
     <DetailWrapper>
       <Image src={study} />
-      <CreatorBox></CreatorBox>
       <DetailForm>
         <p className="author">
-          Created by {post.author} at{" "}
+          Created by {post.author.memberName} at{" "}
           {new Date(post.createdAt).toLocaleString()}{" "}
         </p>
         <span className="Icon">스터디명</span>
