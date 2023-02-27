@@ -9,6 +9,7 @@ import { FaHeart } from "react-icons/fa";
 import { css } from "styled-components";
 import { useQuery } from "react-query";
 import { getStudies } from "../utils/axios/axios";
+import { applyStudies } from "../utils/axios/axios";
 
 // 전체 감싸기
 const DetailWrapper = styled.div`
@@ -124,7 +125,11 @@ const Detail = () => {
   };
   // 가입신청
   const [registered, setRegistered] = useState(false);
-  const handleRegisterButton = () => {
+  const handleRegisterButton = (studyId) => {
+    
+    
+    
+    
     setRegistered(!registered);
     if (!registered) {
       alert("가입 신청 완료!");
