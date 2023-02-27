@@ -141,11 +141,9 @@ const Detail = () => {
   //모든 스터디 정보 갖고오기 
   const { data } = useQuery("studies", getStudies);
   const posts = data.data.data
-  console.log(posts)
 
   // 상세페이지 url의 parameter 정보 갖다쓰기 
   const { id } = useParams();
-  console.log(useParams())
   const post = posts.find((post) => post.studyId === parseInt(id));
   
 
