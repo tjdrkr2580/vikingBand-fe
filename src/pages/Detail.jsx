@@ -15,7 +15,12 @@ import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
 import { css } from "styled-components";
 import { useQuery } from "react-query";
+<<<<<<< HEAD
 import { getStudy } from "../utils/axios/axios";
+=======
+import { getStudies } from "../utils/axios/axios";
+import { applyStudies } from "../utils/axios/axios";
+>>>>>>> 88be806 (feat/profile)
 
 const DetailWrapper = styled.div`
   min-width: 100vw;
@@ -101,7 +106,11 @@ const Detail = () => {
   };
   // 가입신청
   const [registered, setRegistered] = useState(false);
-  const handleRegisterButton = () => {
+  const handleRegisterButton = (studyId) => {
+    
+    
+    
+    
     setRegistered(!registered);
     if (!registered) {
       alert("가입 신청 완료!");
