@@ -7,10 +7,6 @@ export const loginUser = async (User) => {
   return response;
 };
 
-// const getIsUser = async () => {
-//     const response = await axios.get("/api/users/")
-// }
-
 export const addNewUser = async (newUser) => {
   const response = await axios.post(`/api/members/signup`, newUser);
   return response;
