@@ -52,3 +52,4 @@ export const deleteStudyRegist = async (studyId) => {
   return response.data;
 };
 
+

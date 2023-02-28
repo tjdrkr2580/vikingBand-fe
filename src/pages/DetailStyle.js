@@ -1,4 +1,4 @@
-import { pageMargin, flexCenter, boxBorderRadius, fontSmall, fontSmaller } from "../utils/styles/mixins";
+import { pageMargin, flexCenter, boxBorderRadius, fontSmall, fontSmaller, fontBigger } from "../utils/styles/mixins";
 import styled from "styled-components";
 
 export const DetailWrapper = styled.div`
@@ -62,7 +62,29 @@ export const IconsLayout = styled.div`
   }
 `;
 export const OneLineDesc = styled.section`
-  height: 20rem;
+  height: ${(props) => props.height || '10rem'};
   ${flexCenter}
   ${fontSmall}
 `;
+
+export const StStudyMember = styled.div`
+  margin-left: 1rem;
+  margin-right: 0.5rem;
+  ${fontSmall}
+  font-weight: bold;
+`
+export const StCommentText = styled.div`
+  ${fontBigger}
+  padding: 3rem;
+`
+
+export const StInput = styled.input`
+  border-radius: 0.5rem;
+  width: 60rem;
+  height: 8rem;
+
+  ::placeholder {
+    font-size: 1.6rem;
+    padding-left: 1rem;
+  }
+`
