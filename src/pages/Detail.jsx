@@ -160,6 +160,7 @@ const Detail = () => {
     onSuccess: () => {},
   });
   if (isLoading === false) console.log(data.data);
+  
 
   const wishMutate = useMutation((id) => postStudyWish(id));
 
@@ -185,6 +186,12 @@ const Detail = () => {
   const onRegister = async (id) => {
     const res = await registerMutate.mutateAsync(id);
   };
+
+  const registerMutate = useMutation((id) => postStudyRegist(id) )
+
+  const onRegister = async (id) => {
+    const res = await registerMutate.mutateAsync(id)
+  }
 
   return (
     <DetailWrapper>
