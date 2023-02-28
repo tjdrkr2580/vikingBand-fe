@@ -1,10 +1,9 @@
 import React from "react";
-import styled from "styled-components";
 import study from "../assets/study.jpg";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { getStudy, postStudyRegist, postStudyWish } from "../utils/axios/axios";
+import { deleteStudyRegist, getStudy, postStudyRegist, postStudyWish } from "../utils/axios/axios";
 import Button from "../element/Button";
 import {
   DetailWrapper,
@@ -13,26 +12,51 @@ import {
   SubTitles,
   IconsLayout,
   OneLineDesc,
-} from "./style";
+} from "./DetailStyle";
 
 const Detail = () => {
+  
   const { id } = useParams();
+  
   const queryClient = useQueryClient();
+  
+  // 찜하기 
   const wishMutate = useMutation((id) => postStudyWish(id), {
     onSuccess: () => {
       queryClient.invalidateQueries("study");
     },
   });
+  
   const onWish = async (id) => {
-    const res = await wishMutate.mutateAsync(id);
+    await wishMutate.mutateAsync(id);
   };
+
   const { isLoading, data } = useQuery("study", () => getStudy(id));
+  if (isLoading === false) console.log(data)
   const likedStatus = data?.data.wished;
-  if (isLoading === false) console.log(likedStatus);
-  const registerMutate = useMutation((id) => postStudyRegist(id));
+  const appliedStatus = data?.data.applied;
+  
+  // 가입신청 
+  const registerMutate = useMutation((id) => postStudyRegist(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("study")
+    }
+  });
   const onRegister = async (id) => {
-    const res = await registerMutate.mutateAsync(id);
+    await registerMutate.mutateAsync(id);
   };
+
+  // 가입신청 취소 
+  const cancelRegisterMutate = useMutation((id) => deleteStudyRegist(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("study")
+    }
+  });
+  const onCancelRegister = async (id) => {
+    await cancelRegisterMutate.mutateAsync(id);
+  };
+  
+  
   return (
     <DetailWrapper>
       {isLoading === false && data !== undefined && (
@@ -57,8 +81,11 @@ const Detail = () => {
             </ContentWrapper>
           </ImgWrapper>
           <OneLineDesc>{data.data.content}</OneLineDesc>
-          <Button onClick={() => onRegister(data.data.studyId)}>
-            가입 신청
+          <Button wh="l" 
+          onClick={!appliedStatus ? 
+          () => onRegister(data.data.studyId) : 
+          () => onCancelRegister(data.data.studyId)}>
+            {!appliedStatus ? "가입 신청" : "가입 신청 취소"}
           </Button>
         </>
       )}

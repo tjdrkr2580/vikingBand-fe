@@ -46,3 +46,9 @@ export const postStudyRegist = async (studyId) => {
   const response = await axios.post(`/api/study_register/apply/${studyId}`);
   return response.data;
 };
+
+export const deleteStudyRegist = async (studyId) => {
+  const response = await axios.delete(`/api/study_register/cancel/${studyId}`);
+  return response.data;
+};
+
