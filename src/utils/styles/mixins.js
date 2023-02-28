@@ -114,3 +114,91 @@ export const errorStyle = css`
   margin: -0.5rem 0;
   color: ${(props) => props.theme.primary};
 `;
+
+export const studyLists = css`
+  display: grid;
+  max-width: 90rem;
+  grid-template-columns: 1fr 1fr 1fr;
+  @media (max-width: 800px) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @media (max-width: 580px) {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  place-items: center;
+  margin: 0 auto;
+  gap: 1.25rem;
+`;
+
+export const studyList = css`
+  cursor: pointer;
+  width: 25rem;
+  height: 30rem;
+  padding: 0.6rem;
+  img {
+    width: 100%;
+    height: 45%;
+    ${boxBorderRadius}
+    object-fit: cover;
+  }
+  ${boxBorderRadius}
+  transition: 0.25s transform;
+  &:hover {
+    transform: scale(0.98);
+  }
+  box-shadow: ${(props) => props.theme.shadow};
+`;
+
+export const studyLayout = css`
+  padding: 0.6rem;
+  .title {
+    ${fontMedium}
+  }
+  .subject {
+    color: #d1d6e6;
+    width: fit-content;
+    padding: 0.4rem 0.6rem;
+    background-color: ${(props) => props.theme.primary};
+    ${boxBorderRadius};
+    font-size: 1.05rem;
+  }
+  .desc {
+    font-size: 1.05rem;
+    width: 100%;
+    ${elipsis}
+  }
+  .date {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+  .post-bottom {
+    z-index: 997;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    .author {
+      font-size: 1.2rem;
+      display: flex;
+      font-weight: 500;
+      justify-content: flex-end;
+    }
+    .heart {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      span {
+        ${fontSmaller}
+      }
+    }
+  }
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+`;
+
+export const text = css`
+  ${fontBig}
+  color : ${(props) => props.theme.textColor1}
+`;

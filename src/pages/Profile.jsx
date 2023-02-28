@@ -14,17 +14,25 @@ const ProfileWrapper = styled.section`
   ${pageMargin}
   display: flex;
   flex-direction: column;
+  width: 100%;
+  min-width: 30rem;
   gap: 3rem;
+  .active {
+    border-bottom: 0.2rem solid ${(props) => props.theme.primary};
+  }
 `;
 
 const NavBarWrapper = styled.ul`
   display: flex;
   gap: 1.5rem;
   align-items: center;
+  padding-left: 3rem;
 `;
 
 const NavBarList = styled.li`
   ${fontSmall}
+  padding: 0.6rem 0.2rem;
+  border-bottom: 0.2rem solid transparent;
 `;
 
 const Profile = () => {

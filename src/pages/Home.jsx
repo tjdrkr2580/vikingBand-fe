@@ -3,16 +3,13 @@ import NavBar from "../components/NavBar";
 import {
   boxBorderRadius,
   elipsis,
-  flexCenter,
   fontMedium,
-  fontSmall,
   fontSmaller,
   pageMargin,
 } from "../utils/styles/mixins";
 import test from "../assets/test.jpg";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isModalState, isUserState } from "../utils/recoil/atoms";
-import Login from "../components/Login";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { getStudies } from "../utils/axios/axios";
@@ -127,7 +124,7 @@ const Home = () => {
             <PostList
               key={i}
               onClick={() => {
-                if (isUser == true) {
+                if (isUser === true) {
                   navigateToPost(post.studyId);
                 } else {
                   alert("로그인 후 이용 바랍니다.");
