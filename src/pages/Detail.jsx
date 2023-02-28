@@ -13,17 +13,15 @@ import {
 import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getStudy, postStudyRegist, postStudyWish } from "../utils/axios/axios";
 import Button from "../element/Button";
-
 const DetailWrapper = styled.div`
   min-width: 100vw;
   ${flexCenter}
   flex-direction: column;
   ${pageMargin}
 `;
-
 const ImgWrapper = styled.section`
   width: 97.5%;
   position: relative;
@@ -37,7 +35,6 @@ const ImgWrapper = styled.section`
     object-fit: cover;
   }
 `;
-
 const ContentWrapper = styled.section`
   z-index: 997;
   position: absolute;
@@ -56,7 +53,6 @@ const ContentWrapper = styled.section`
     ${fontSmall}
   }
 `;
-
 const SubTitles = styled.ul`
   display: flex;
   gap: 1.5rem;
@@ -68,7 +64,6 @@ const SubTitles = styled.ul`
     ${fontSmaller}
   }
 `;
-
 const IconsLayout = styled.div`
   display: flex;
   gap: 1rem;
@@ -79,57 +74,29 @@ const IconsLayout = styled.div`
     padding-bottom: 0.2rem;
   }
 `;
-
 const OneLineDesc = styled.section`
   height: 20rem;
   ${flexCenter}
   ${fontSmall}
 `;
-
 const Detail = () => {
-  const [liked, setLiked] = useState(false);
-  const handleLikeClick = () => {
-    setLiked(!liked);
-    if (!liked) {
-      alert("찜한 스터디에 추가되었습니다.");
-    } else {
-      alert("찜한 스터디에서 삭제되었습니다.");
-    }
-  };
-  const [registered, setRegistered] = useState(false);
-  const handleRegisterButton = (studyId) => {
-    setRegistered(!registered);
-    if (!registered) {
-      alert("가입 신청 완료!");
-    } else {
-      alert("가입 신청 취소 완료!");
-    }
-  };
-  const navigate = useNavigate();
-  const backToHomeHandler = () => {
-    navigate("/");
-  };
-
   const { id } = useParams();
-
-  // 원하는 아이디의 스터디 정보를 가져옴
-  const { isLoading, data } = useQuery("study", () => getStudy(id));
-  if (isLoading === false) console.log(data.data);
-
-  const wishMutate = useMutation((id) => postStudyWish(id));
-
-  // 하트 누른 게시글의 아이디 정보 담아서 post 요청 보냄
+  const queryClient = useQueryClient();
+  const wishMutate = useMutation((id) => postStudyWish(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("study");
+    },
+  });
   const onWish = async (id) => {
     const res = await wishMutate.mutateAsync(id);
-    console.log(res);
   };
-
+  const { isLoading, data } = useQuery("study", () => getStudy(id));
+  const likedStatus = data.data.wished
+  if (isLoading === false) console.log(likedStatus);
   const registerMutate = useMutation((id) => postStudyRegist(id));
-
   const onRegister = async (id) => {
     const res = await registerMutate.mutateAsync(id);
   };
-
   return (
     <DetailWrapper>
       {isLoading === false && data !== undefined && (
@@ -144,7 +111,7 @@ const Detail = () => {
               </SubTitles>
               <IconsLayout>
                 <FaHeart
-                  color="FF597B"
+                  color= {likedStatus ? "red" : "lightgray"}
                   cursor="pointer"
                   size="24"
                   onClick={() => onWish(data.data.studyId)}
