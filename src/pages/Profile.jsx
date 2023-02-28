@@ -51,9 +51,6 @@ const Profile = () => {
   const res = useQuery("detailInfo", () => {
     return getUserDetailInfo(userInfo.memberId);
   });
-  if (res.isLoading === false) {
-    console.log(res);
-  }
   return (
     <ProfileWrapper>
       {res.isSuccess === true && (

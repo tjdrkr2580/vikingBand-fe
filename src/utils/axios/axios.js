@@ -52,4 +52,7 @@ export const deleteStudyRegist = async (studyId) => {
   return response.data;
 };
 
-
+export const deleteStudy = async (studyId) => {
+  const response = await axios.delete(`api/studies/${studyId}`);
+  return response.data;
+};

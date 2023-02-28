@@ -1,7 +1,15 @@
 import React from "react";
 import { AiFillHeart } from "react-icons/ai";
 import styled from "styled-components";
-import { fontBig, fontMedium } from "../utils/styles/mixins";
+import {
+  elipsis,
+  fontBig,
+  fontMedium,
+  fontSmall,
+} from "../utils/styles/mixins";
+import Button from "../element/Button";
+import { useMutation, useQueryClient } from "react-query";
+import { deleteStudy } from "../utils/axios/axios";
 
 const MyStudyLists = styled.ul`
   display: flex;
@@ -17,9 +25,11 @@ const MyStudyList = styled.li`
   padding: 1rem 0.8rem;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
 
   h1 {
+    width: 12rem;
+    ${elipsis}
     ${fontMedium}
   }
 `;
@@ -28,6 +38,10 @@ const Like = styled.section`
   display: flex;
   align-items: center;
   gap: 1rem;
+
+  span {
+    ${fontSmall}
+  }
 `;
 
 const Text = styled.h1`
@@ -35,7 +49,18 @@ const Text = styled.h1`
 `;
 
 const MyStudy = ({ data }) => {
-  console.log(data);
+  const queryClient = useQueryClient();
+  const onDeleteMutation = useMutation((studyId) => deleteStudy(studyId), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("detailInfo");
+    },
+  });
+
+  const onDelete = async (studyId) => {
+    const res = onDeleteMutation.mutateAsync(studyId);
+    console.log(res);
+  };
+
   return (
     <MyStudyLists>
       {data.length === 0 && <Text>생성하신 스터디가 존재하지 않습니다.</Text>}
@@ -47,6 +72,9 @@ const MyStudy = ({ data }) => {
               <AiFillHeart size={20} color="EB455F" />
               <span>{data.likes}</span>
             </Like>
+            <Button wh="s" onClick={() => onDelete(data.studyId)}>
+              삭제
+            </Button>
           </MyStudyList>
         ))}
     </MyStudyLists>
