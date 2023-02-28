@@ -37,6 +37,10 @@ export const postStudyWish = async (studyId) => {
   return response.data;
 };
 
+export const postBoard = async ({ id, data }) => {
+  const response = await axios.post(`/api/study_boards/${id}`, data);
+  return response.data;
+};
 export const postStudyRegist = async (studyId) => {
   const response = await axios.post(`/api/study_register/apply/${studyId}`);
   return response.data;

@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form";
 import Button from "../element/Button";
 import { motion } from "framer-motion";
 import { modalVariants } from "../utils/animations/variants";
-import { QueryClient, useMutation, useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { addNewStudy } from "../utils/axios/axios";
 
 const StudyModalWrapper = styled.section`

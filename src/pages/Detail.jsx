@@ -2,20 +2,16 @@ import React from "react";
 import styled from "styled-components";
 import study from "../assets/study.jpg";
 import { useNavigate, useParams } from "react-router-dom";
-import {
-  fontBigger,
-  fontBig,
-  pageMargin,
-  fontMedium,
-  fontSmall,
-  fontSmaller,
-} from "../utils/styles/mixins";
+import { pageMargin, fontSmall, fontSmaller } from "../utils/styles/mixins";
 import { flexCenter, boxBorderRadius } from "../utils/styles/mixins";
 import { useState } from "react";
 import { FaHeart } from "react-icons/fa";
-import { useMutation, useQuery } from "react-query";
-import { getStudy, postStudyRegist, postStudyWish } from "../utils/axios/axios";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { getStudy, postBoard, postStudyWish } from "../utils/axios/axios";
 import Button from "../element/Button";
+import { useForm } from "react-hook-form";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "../utils/recoil/atoms";
 
 const DetailWrapper = styled.div`
   min-width: 100vw;
@@ -88,8 +84,47 @@ const OneLineDesc = styled.section`
   ${fontSmall}
 `;
 
+const BoardAddWrapper = styled.form`
+  padding: 0 1rem;
+  width: 100%;
+  max-width: 50rem;
+  ${flexCenter}
+  display : flex;
+  flex-direction: column;
+  gap: 1rem;
+  height: 15rem;
+  input {
+    background-color: transparent;
+    height: 4rem;
+    color: ${(props) => props.theme.textColor3};
+    letter-spacing: 0.08rem;
+    font-size: 1.35rem;
+    padding: 0.4rem 0.8rem;
+    border: 0.1rem solid #797777;
+    border-radius: 0.8rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+  .title {
+    align-self: flex-start;
+    width: 15rem;
+    margin-left: 0.5rem;
+  }
+  .content {
+    width: 98%;
+  }
+  button {
+    align-self: flex-end;
+  }
+`;
+
 const Detail = () => {
   const [liked, setLiked] = useState(false);
+  const [isMade, setIsMade] = useState(false);
+  const userInfo = useRecoilValue(userInfoState);
+  const { register, reset, handleSubmit } = useForm();
   const handleLikeClick = () => {
     setLiked(!liked);
     if (!liked) {
@@ -111,11 +146,19 @@ const Detail = () => {
   const backToHomeHandler = () => {
     navigate("/");
   };
-  
+  // const { data } = useQuery("studies", getStudies);
+  // const posts = data.data.data;
+  // const post = posts.find((post) => post.studyId === parseInt(id));
+
+  const queryClient = useQueryClient();
+
+  const boardMutate = useMutation((id, data) => postBoard({ id, data }));
+
   const { id } = useParams();
 
-  // 원하는 아이디의 스터디 정보를 가져옴
-  const { isLoading, data } = useQuery("study", () => getStudy(id));
+  const { isLoading, data } = useQuery("study", () => getStudy(id), {
+    onSuccess: () => {},
+  });
   if (isLoading === false) console.log(data.data);
   
 
@@ -123,8 +166,25 @@ const Detail = () => {
 
   // 하트 누른 게시글의 아이디 정보 담아서 post 요청 보냄
   const onWish = async (id) => {
-    const res = await wishMutate.mutateAsync(id);
-    console.log(res);
+    try {
+      const res = await wishMutate.mutateAsync(id, {
+        onSuccess: () => {
+          queryClient.invalidateQueries("study");
+        },
+      });
+    } catch (err) {
+      alert("로그인 혹은 토큰이 잘못되었습니다!");
+    }
+  };
+
+  const onBoard = async (data) => {
+    console.log(data);
+  };
+
+  const registerMutate = useMutation((id) => postStudyRegist(id));
+
+  const onRegister = async (id) => {
+    const res = await registerMutate.mutateAsync(id);
   };
 
   const registerMutate = useMutation((id) => postStudyRegist(id) )
@@ -157,9 +217,25 @@ const Detail = () => {
             </ContentWrapper>
           </ImgWrapper>
           <OneLineDesc>{data.data.content}</OneLineDesc>
-          <Button
-            onClick = {() => onRegister(data.data.studyId)}
-          >가입 신청</Button>
+          <BoardAddWrapper onSubmit={handleSubmit(onBoard)}>
+            <input
+              type="text"
+              className="title"
+              placeholder="제목"
+              {...register("content", {
+                required: true,
+              })}
+            />
+            <input
+              type="text"
+              className="content"
+              placeholder="글을 작성해주세요"
+              {...register("title", {
+                required: true,
+              })}
+            />
+            <Button>추가</Button>
+          </BoardAddWrapper>
         </>
       )}
     </DetailWrapper>
