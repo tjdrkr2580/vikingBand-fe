@@ -33,7 +33,7 @@ export const getUserDetailInfo = async (id) => {
 };
 
 export const postStudyWish = async (studyId) => {
-  const response = await axios.post(`/api/wish/${studyId}`);
+  const response = await axios.post(`/api/wish/toggle/${studyId}`);
   return response.data;
 };
 
