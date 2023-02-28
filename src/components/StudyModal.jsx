@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { studyModalState } from "../utils/recoil/atoms";
 import {
@@ -12,7 +12,8 @@ import Button from "../element/Button";
 import { motion } from "framer-motion";
 import { modalVariants } from "../utils/animations/variants";
 import { useMutation, useQueryClient } from "react-query";
-import { addNewStudy } from "../utils/axios/axios";
+import { addNewStudy, postImageUpload } from "../utils/axios/axios";
+import imageCompression from "browser-image-compression";
 
 const StudyModalWrapper = styled.section`
   ${modalWrapperStyle}
@@ -27,9 +28,13 @@ const ErrorMessage = styled.p`
 `;
 
 const StudyModal = () => {
+  const [formData, setFormData] = useState(new FormData());
+  const [url, setUrl] = useState("");
   const queryClient = useQueryClient();
   const studymodal = useRef(null);
   const setStudyModalVisible = useSetRecoilState(studyModalState);
+  const imgMutation = useMutation((data) => postImageUpload(data));
+
   const {
     register,
     reset,
@@ -43,14 +48,34 @@ const StudyModal = () => {
     },
   });
 
+  const onHandleFile = async (e) => {
+    const imgFile = e.target.files[0];
+    const option = {
+      maxSizeMB: 2,
+    };
+    const sizingImg = await imageCompression(imgFile, option);
+    try {
+      const imgForm = new FormData();
+      console.log(imgFile);
+      imgForm.append("file", new File([sizingImg], sizingImg.name));
+      const res = await imgMutation.mutateAsync(imgForm);
+      setUrl(res.data["imageUrl"]);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onSubmit = async (data) => {
     const newStudy = {
       title: data.title,
       subject: data.subject,
       content: data.content,
+      imageUrl: url,
       maxMember: parseInt(data.maxMember),
     };
+    console.log(newStudy);
     const res = await studyCreateMutate.mutateAsync(newStudy);
+    console.log(res);
     setStudyModalVisible(false);
     reset();
   };
@@ -125,6 +150,7 @@ const StudyModal = () => {
         {errors?.maxMember?.type === "max" && (
           <ErrorMessage>최대 범위는 100입니다.</ErrorMessage>
         )}
+        <input type="file" typeof="image/*" onChange={onHandleFile} />
         <Button wh="l">스터디 생성</Button>
       </StudyModalForm>
     </StudyModalWrapper>

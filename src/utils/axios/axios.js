@@ -56,3 +56,12 @@ export const deleteStudy = async (studyId) => {
   const response = await axios.delete(`api/studies/${studyId}`);
   return response.data;
 };
+
+export const postImageUpload = async (data) => {
+  const response = await axios.post(`api/studies/file`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};

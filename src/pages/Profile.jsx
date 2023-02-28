@@ -44,7 +44,6 @@ const Profile = () => {
       navigate("/");
     }
   }, []);
-
   const onFilter = (e) => {
     setFilter(e.target.innerText);
   };

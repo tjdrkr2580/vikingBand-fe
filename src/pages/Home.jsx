@@ -132,7 +132,10 @@ const Home = () => {
                 }
               }}
             >
-              <img src={test} alt={post.title} />
+              <img
+                src={post.imageUrl === "" ? test : post.imageUrl}
+                alt={post.title}
+              />
               <PostForm>
                 <h1 className="title">{post.title}</h1>
                 <span className="subject">{post.subject}</span>
