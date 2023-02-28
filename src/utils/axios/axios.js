@@ -29,7 +29,8 @@ export const getStudy = async (id) => {
 
 export const getUserDetailInfo = async (id) => {
   const response = await axios.get(`/api/members/details/${id}`);
-  return response.data;
+  console.log("됨" + response);
+  return response?.data.data;
 };
 
 export const postStudyWish = async (studyId) => {

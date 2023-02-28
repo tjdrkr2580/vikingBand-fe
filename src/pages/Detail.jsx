@@ -6,7 +6,14 @@ import { FaHeart } from "react-icons/fa";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { getStudy, postStudyRegist, postStudyWish } from "../utils/axios/axios";
 import Button from "../element/Button";
-import { DetailWrapper, ImgWrapper, ContentWrapper, SubTitles, IconsLayout, OneLineDesc } from "./style";
+import {
+  DetailWrapper,
+  ImgWrapper,
+  ContentWrapper,
+  SubTitles,
+  IconsLayout,
+  OneLineDesc,
+} from "./style";
 
 const Detail = () => {
   const { id } = useParams();
@@ -20,7 +27,7 @@ const Detail = () => {
     const res = await wishMutate.mutateAsync(id);
   };
   const { isLoading, data } = useQuery("study", () => getStudy(id));
-  const likedStatus = data.data.wished
+  const likedStatus = data.data.wished;
   if (isLoading === false) console.log(likedStatus);
   const registerMutate = useMutation((id) => postStudyRegist(id));
   const onRegister = async (id) => {
@@ -40,7 +47,7 @@ const Detail = () => {
               </SubTitles>
               <IconsLayout>
                 <FaHeart
-                  color= {likedStatus ? "red" : "lightgray"}
+                  color={likedStatus ? "red" : "lightgray"}
                   cursor="pointer"
                   size="24"
                   onClick={() => onWish(data.data.studyId)}
