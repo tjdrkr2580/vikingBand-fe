@@ -74,7 +74,7 @@ const Profile = () => {
             <LikeStudy data={res?.data?.myStudyWishes} />
           )}
           {filter === "가입 신청한 스터디" && (
-            <ApplyStudy data={res?.data?.myStudiesWithRegistMembers} />
+            <ApplyStudy data={res?.data?.myStudyRegists} />
           )}
           {filter === "내 스터디 관리" && (
             <MyStudy data={res?.data?.myCreatedStudies} />
