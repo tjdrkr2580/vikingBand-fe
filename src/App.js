@@ -7,10 +7,15 @@ import Detail from "./pages/Detail";
 import GlobalStyle from "./utils/styles/GlobalStyle";
 import styled, { ThemeProvider } from "styled-components";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { darkmodeState, studyModalState } from "./utils/recoil/atoms";
+import {
+  darkmodeState,
+  studyModalState,
+  isModalState,
+} from "./utils/recoil/atoms";
 import { darkTheme, lightTheme } from "./utils/styles/theme";
 import StudyModal from "./components/StudyModal";
 import { useEffect } from "react";
+import Login from "./components/Login";
 
 const RootWrapper = styled.div`
   display: flex;
@@ -25,11 +30,7 @@ const RootWrapper = styled.div`
 function App() {
   const [isDark, setDark] = useRecoilState(darkmodeState);
   const isModalStudy = useRecoilValue(studyModalState);
-  const { vDark } = JSON.parse(localStorage.getItem("vDark"));
-
-  useEffect(() => {
-    setDark(vDark);
-  }, []);
+  const visible = useRecoilValue(isModalState);
 
   return (
     <ThemeProvider theme={isDark === true ? darkTheme : lightTheme}>
@@ -45,6 +46,7 @@ function App() {
           <Footer />
         </BrowserRouter>
         {isModalStudy === true && <StudyModal />}
+        {visible === true && <Login />}
       </RootWrapper>
     </ThemeProvider>
   );

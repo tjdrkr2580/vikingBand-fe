@@ -5,6 +5,8 @@ import {
   elipsis,
   flexCenter,
   fontMedium,
+  fontSmall,
+  fontSmaller,
   pageMargin,
 } from "../utils/styles/mixins";
 import test from "../assets/test.jpg";
@@ -94,21 +96,26 @@ const PostForm = styled.section`
       font-weight: 500;
       justify-content: flex-end;
     }
+    .heart {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      span {
+        ${fontSmaller}
+      }
+    }
   }
-
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
 `;
 
 const Home = () => {
-  const visible = useRecoilValue(isModalState);
   const navigate = useNavigate();
 
   const navigateToPost = (postId) => {
     navigate(`/post/${postId}`);
   };
-
   const { isLoading, data } = useQuery("studies", getStudies);
   return (
     <HomeWrapper>
@@ -131,7 +138,11 @@ const Home = () => {
                   {new Date(post.createdAt).toLocaleString()}
                 </p>
                 <section className="post-bottom">
-                  <AiFillHeart size={22} color="FF597B" />
+                  <div className="heart">
+                    <AiFillHeart size={22} color="FF597B" />
+                    <span>{post.likes}</span>
+                  </div>
+
                   <span className="author">
                     작성자 : {post.author.memberName}
                   </span>
@@ -140,7 +151,6 @@ const Home = () => {
             </PostList>
           ))}
       </PostLists>
-      {visible === true && <Login />}
     </HomeWrapper>
   );
 };
