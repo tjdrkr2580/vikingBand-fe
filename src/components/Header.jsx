@@ -90,7 +90,7 @@ const Header = () => {
     removeCookie("viking-band-token");
     setIsLoggedIn(false);
     window.location.reload();
-    navigate('/')
+    navigate("/");
   };
 
   const setVisible = useSetRecoilState(isModalState);
@@ -115,7 +115,12 @@ const Header = () => {
             <HeaderButton onClick={handleHeaderButtonClick} src={unnamed} />
             {isDropdownOpen && (
               <DropdownMenu>
-                <DropdownMenuItem onClick={() => navigate("/profile")}>
+                <DropdownMenuItem
+                  onClick={() => {
+                    navigate("/profile");
+                    setIsDropdownOpen(false);
+                  }}
+                >
                   프로필
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>

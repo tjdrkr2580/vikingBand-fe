@@ -54,10 +54,9 @@ const Login = () => {
         password: data.password,
       };
       const res = await loginMutation.mutateAsync(User);
-      await setCookie("viking-band-token", res.headers.authorization);
+      setCookie("vToken", res.headers.authorization);
       setUserInfo(res.data.data);
-      axios.defaults.headers.common["Authorization"] =
-        cookies["viking-band-token"];
+      axios.defaults.headers.common["Authorization"] = cookies["vToken"];
       setIsUser(true);
       setVisible(false);
     } else {

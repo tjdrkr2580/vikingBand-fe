@@ -10,8 +10,8 @@ import {
   pageMargin,
 } from "../utils/styles/mixins";
 import test from "../assets/test.jpg";
-import { useRecoilValue } from "recoil";
-import { isModalState } from "../utils/recoil/atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { isModalState, isUserState } from "../utils/recoil/atoms";
 import Login from "../components/Login";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
@@ -112,7 +112,8 @@ const PostForm = styled.section`
 
 const Home = () => {
   const navigate = useNavigate();
-
+  const isUser = useRecoilValue(isUserState);
+  const setModal = useSetRecoilState(isModalState);
   const navigateToPost = (postId) => {
     navigate(`/post/${postId}`);
   };
@@ -126,7 +127,12 @@ const Home = () => {
             <PostList
               key={i}
               onClick={() => {
-                navigateToPost(post.studyId);
+                if (isUser == true) {
+                  navigateToPost(post.studyId);
+                } else {
+                  alert("로그인 후 이용 바랍니다.");
+                  setModal(true);
+                }
               }}
             >
               <img src={test} alt={post.title} />

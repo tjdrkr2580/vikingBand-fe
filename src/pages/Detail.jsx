@@ -27,7 +27,7 @@ const Detail = () => {
     const res = await wishMutate.mutateAsync(id);
   };
   const { isLoading, data } = useQuery("study", () => getStudy(id));
-  const likedStatus = data.data.wished;
+  const likedStatus = data?.data.wished;
   if (isLoading === false) console.log(likedStatus);
   const registerMutate = useMutation((id) => postStudyRegist(id));
   const onRegister = async (id) => {

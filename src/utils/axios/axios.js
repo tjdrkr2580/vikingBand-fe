@@ -23,7 +23,7 @@ export const getStudies = async () => {
 };
 
 export const getStudy = async (id) => {
-  const response = await axios.get(`/api/studies/${id}`);
+  const response = await axios.get(`/api/studies/details/${id}`);
   return response.data;
 };
 

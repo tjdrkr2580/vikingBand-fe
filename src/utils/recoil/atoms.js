@@ -37,3 +37,8 @@ export const userDetailInfo = atom({
   key: `state${v1()}`,
   default: undefined,
 });
+
+export const tokenState = atom({
+  key: `state${v1()}`,
+  default: false,
+});
