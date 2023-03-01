@@ -4,10 +4,12 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useMutation, useQuery, useQueryClient } from "react-query";
+
 import { deleteStudyRegist, getStudy, postStudyRegist, postStudyWish, postBoard } from "../utils/axios/axios";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "../utils/recoil/atoms";
 import { getUserDetailInfo } from "../utils/axios/axios";
+
 import Button from "../element/Button";
 import {
   DetailWrapper,
@@ -23,37 +25,37 @@ import {
 } from "./DetailStyle";
 
 const Detail = () => {
-  
+
   const { id } = useParams();
-  
+
   const queryClient = useQueryClient();
-  
-  // 찜하기 
+
+  // 찜하기
   const wishMutate = useMutation((id) => postStudyWish(id), {
     onSuccess: () => {
       queryClient.invalidateQueries("study");
     },
   });
-  
+
   const onWish = async (id) => {
     await wishMutate.mutateAsync(id);
   };
 
-  // 가입신청 
+  //가입신청
   const registerMutate = useMutation((id) => postStudyRegist(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries("study")
-    }
+      queryClient.invalidateQueries("study");
+    },
   });
   const onRegister = async (id) => {
     await registerMutate.mutateAsync(id);
   };
 
-  // 가입신청 취소 
+  // 가입신청 취소
   const cancelRegisterMutate = useMutation((id) => deleteStudyRegist(id), {
     onSuccess: () => {
-      queryClient.invalidateQueries("study")
-    }
+      queryClient.invalidateQueries("study");
+    },
   });
   const onCancelRegister = async (id) => {
     await cancelRegisterMutate.mutateAsync(id);
@@ -112,46 +114,54 @@ const Detail = () => {
     content,
     createdAt
   }));
-  
+
   return (
     <DetailWrapper>
       {/* 가입신청 승인 전 */}
-      {isLoading === false && data !== undefined && approvedStatus === false && (
-        <>
-          <ImgWrapper>
-            <img src={study} alt="study" />
-            <ContentWrapper>
-              <h1>{data.data.title}</h1>
-              <SubTitles>
-                <li>{data.data.author.memberName}</li>
-                <li>{new Date(data.data.createdAt).toLocaleString()}</li>
-              </SubTitles>
-              <IconsLayout>
-                <FaHeart
-                  color={likedStatus ? "red" : "lightgray"}
-                  cursor="pointer"
-                  size="24"
-                  onClick={() => onWish(data.data.studyId)}
-                />
-                <span>{data.data.likes}</span>
-              </IconsLayout>
-            </ContentWrapper>
-          </ImgWrapper>
-          <OneLineDesc>{data.data.content}</OneLineDesc>
-          <Button wh="l" 
-          onClick={!appliedStatus ? 
-          () => onRegister(data.data.studyId) : 
-          () => onCancelRegister(data.data.studyId)}>
-            {!appliedStatus ? "가입 신청" : "가입 신청 취소"}
-          </Button>
-        </>
-      )}
+      {isLoading === false &&
+        data !== undefined &&
+        approvedStatus === false && (
+          <>
+            <ImgWrapper>
+              <img src={study} alt="study" />
+              <ContentWrapper>
+                <h1>{data.data.title}</h1>
+                <SubTitles>
+                  <li>{data.data.author.memberName}</li>
+                  <li>{new Date(data.data.createdAt).toLocaleString()}</li>
+                </SubTitles>
+                <IconsLayout>
+                  <FaHeart
+                    color={likedStatus ? "red" : "lightgray"}
+                    cursor="pointer"
+                    size="24"
+                    onClick={() => onWish(data.data.studyId)}
+                  />
+                  <span>{data.data.likes}</span>
+                </IconsLayout>
+              </ContentWrapper>
+            </ImgWrapper>
+            <OneLineDesc>{data.data.content}</OneLineDesc>
+            <Button
+              wh="l"
+              onClick={
+                !appliedStatus
+                  ? () => onRegister(data.data.studyId)
+                  : () => onCancelRegister(data.data.studyId)
+              }
+            >
+              {!appliedStatus ? "가입 신청" : "가입 신청 취소"}
+            </Button>
+          </>
+        )}
 
       {isLoading === false && data !== undefined && approvedStatus === true && (
-    
-      <>
-      <ImgWrapper>
-            <img src={study} alt="study" />
+        <>
+          <ImgWrapper>
+            <img
+              src={data.data.imageUrl === "" ? study : data.data.imageUrl}
+              alt="study"
+            />
             <ContentWrapper>
               <h1>{data.data.title}</h1>
               <SubTitles>
@@ -160,10 +170,15 @@ const Detail = () => {
               </SubTitles>
             </ContentWrapper>
           </ImgWrapper>
-          <OneLineDesc> 스터디 구성원({approvedMembers.length}명) : 
+          <OneLineDesc>
+            {" "}
+            스터디 구성원({approvedMembers.length}명) :
             {approvedMembers.map((member) => (
-              <StStudyMember key={member.memberId}> {member.memberName}. </StStudyMember>
-          ))}
+              <StStudyMember key={member.memberId}>
+                {" "}
+                {member.memberName}.{" "}
+              </StStudyMember>
+            ))}
           </OneLineDesc>
           <OneLineDesc>{data.data.content}</OneLineDesc>
 

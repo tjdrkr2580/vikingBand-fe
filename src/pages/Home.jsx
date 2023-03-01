@@ -120,7 +120,8 @@ const Home = () => {
       <NavBar />
       <PostLists>
         {isLoading === false &&
-          data.data.data.map((post, i) => (
+          data !== undefined &&
+          data?.data.data.map((post, i) => (
             <PostList
               key={i}
               onClick={() => {
@@ -132,7 +133,10 @@ const Home = () => {
                 }
               }}
             >
-              <img src={test} alt={post.title} />
+              <img
+                src={post.imageUrl === "" ? test : post.imageUrl}
+                alt={post.title}
+              />
               <PostForm>
                 <h1 className="title">{post.title}</h1>
                 <span className="subject">{post.subject}</span>

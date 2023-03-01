@@ -71,6 +71,7 @@ export const modalStyle = css`
   background-color: ${(props) => props.theme.bgColor};
   ${boxBorderRadius}
   input {
+    display: flex;
     width: 20rem;
     background-color: transparent;
     height: 4rem;
