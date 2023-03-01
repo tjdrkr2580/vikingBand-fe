@@ -14,7 +14,6 @@ import {
 } from "./utils/recoil/atoms";
 import { darkTheme, lightTheme } from "./utils/styles/theme";
 import StudyModal from "./components/StudyModal";
-import { useEffect } from "react";
 import Login from "./components/Login";
 
 const RootWrapper = styled.div`

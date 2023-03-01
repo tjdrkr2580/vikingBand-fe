@@ -54,6 +54,7 @@ const Login = () => {
         password: data.password,
       };
       const res = await loginMutation.mutateAsync(User);
+      console.log(res);
       setCookie("vToken", res.headers.authorization);
       setUserInfo(res.data.data);
       axios.defaults.headers.common["Authorization"] = cookies["vToken"];
