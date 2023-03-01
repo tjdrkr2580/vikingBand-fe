@@ -84,3 +84,8 @@ export const postImageUpload = async (data) => {
   });
   return response.data;
 };
+
+export const getHottest = async () => {
+  const response = await axios.get("api/studies/hottest");
+  return response;
+};

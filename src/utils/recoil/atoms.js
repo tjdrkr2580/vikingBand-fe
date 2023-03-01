@@ -42,3 +42,8 @@ export const tokenState = atom({
   key: `state${v1()}`,
   default: undefined,
 });
+
+export const filter = atom({
+  key: `state${v1()}`,
+  default: "최신 순",
+});

@@ -9,11 +9,12 @@ import {
 } from "../utils/styles/mixins";
 import test from "../assets/test.jpg";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { isModalState, isUserState } from "../utils/recoil/atoms";
+import { filter, isModalState, isUserState } from "../utils/recoil/atoms";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
-import { getStudies } from "../utils/axios/axios";
+import { getHottest, getStudies } from "../utils/axios/axios";
 import { AiFillHeart } from "react-icons/ai";
+import { useState } from "react";
 
 const HomeWrapper = styled.section`
   min-height: 77.5vh;
@@ -111,52 +112,93 @@ const Home = () => {
   const navigate = useNavigate();
   const isUser = useRecoilValue(isUserState);
   const setModal = useSetRecoilState(isModalState);
+  const filterState = useRecoilValue(filter);
   const navigateToPost = (postId) => {
     navigate(`/post/${postId}`);
   };
-  const { isLoading, data } = useQuery("studies", getStudies);
+  const res = useQuery("studies1", getStudies);
+  const res2 = useQuery("studies2", getHottest);
   return (
     <HomeWrapper>
       <NavBar />
       <PostLists>
-        {isLoading === false &&
-          data !== undefined &&
-          data?.data.data.map((post, i) => (
-            <PostList
-              key={i}
-              onClick={() => {
-                if (isUser === true) {
-                  navigateToPost(post.studyId);
-                } else {
-                  alert("로그인 후 이용 바랍니다.");
-                  setModal(true);
-                }
-              }}
-            >
-              <img
-                src={post.imageUrl === "" ? test : post.imageUrl}
-                alt={post.title}
-              />
-              <PostForm>
-                <h1 className="title">{post.title}</h1>
-                <span className="subject">{post.subject}</span>
-                <p className="desc">{post.content}</p>
-                <p className="date">
-                  {new Date(post.createdAt).toLocaleString()}
-                </p>
-                <section className="post-bottom">
-                  <div className="heart">
-                    <AiFillHeart size={22} color="FF597B" />
-                    <span>{post.likes}</span>
-                  </div>
+        {res.isLoading === false &&
+        res2.isLoading === false &&
+        filterState === "최신 순"
+          ? res.data !== undefined &&
+            res.data?.data.data.map((post, i) => (
+              <PostList
+                key={i}
+                onClick={() => {
+                  if (isUser === true) {
+                    navigateToPost(post.studyId);
+                  } else {
+                    alert("로그인 후 이용 바랍니다.");
+                    setModal(true);
+                  }
+                }}
+              >
+                <img
+                  src={post.imageUrl === "" ? test : post.imageUrl}
+                  alt={post.title}
+                />
+                <PostForm>
+                  <h1 className="title">{post.title}</h1>
+                  <span className="subject">{post.subject}</span>
+                  <p className="desc">{post.content}</p>
+                  <p className="date">
+                    {new Date(post.createdAt).toLocaleString()}
+                  </p>
+                  <section className="post-bottom">
+                    <div className="heart">
+                      <AiFillHeart size={22} color="FF597B" />
+                      <span>{post.likes}</span>
+                    </div>
 
-                  <span className="author">
-                    작성자 : {post.author.memberName}
-                  </span>
-                </section>
-              </PostForm>
-            </PostList>
-          ))}
+                    <span className="author">
+                      작성자 : {post.author.memberName}
+                    </span>
+                  </section>
+                </PostForm>
+              </PostList>
+            ))
+          : res2.data !== undefined &&
+            res2.data?.data.data.map((post, i) => (
+              <PostList
+                key={i}
+                onClick={() => {
+                  if (isUser === true) {
+                    navigateToPost(post.studyId);
+                  } else {
+                    alert("로그인 후 이용 바랍니다.");
+                    setModal(true);
+                  }
+                }}
+              >
+                <img
+                  src={post.imageUrl === "" ? test : post.imageUrl}
+                  alt={post.title}
+                />
+                <PostForm>
+                  <h1 className="title">{post.title}</h1>
+                  <span className="subject">{post.subject}</span>
+                  <p className="desc">{post.content}</p>
+                  <p className="date">
+                    {new Date(post.createdAt).toLocaleString()}
+                  </p>
+                  <section className="post-bottom">
+                    <div className="heart">
+                      <AiFillHeart size={22} color="FF597B" />
+                      <span>{post.likes}</span>
+                    </div>
+
+                    <span className="author">
+                      작성자 : {post.author.memberName}
+                    </span>
+                  </section>
+                </PostForm>
+              </PostList>
+            ))}
       </PostLists>
     </HomeWrapper>
   );

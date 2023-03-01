@@ -1,5 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { useRecoilState } from "recoil";
 import styled from "styled-components";
+import { filter } from "../utils/recoil/atoms";
 import { flexCenter } from "../utils/styles/mixins";
 
 export const NavElement = styled.li`
@@ -32,10 +34,11 @@ export const NavBarWrapper = styled.ul`
 `;
 
 const NavBar = () => {
-  const [selectFilter, setSelectFilter] = useState("최신 순");
+  const [selectFilter, setSelectFilter] = useRecoilState(filter);
   const filters = ["최신 순", "좋아요 순"];
   const onFilter = async (filter) => {
     setSelectFilter(filter);
+    console.log(filter);
   };
   return (
     <NavBarWrapper>
