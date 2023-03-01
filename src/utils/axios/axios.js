@@ -38,8 +38,8 @@ export const postStudyWish = async (studyId) => {
   return response.data;
 };
 
-export const postBoard = async ({ id, data }) => {
-  const response = await axios.post(`/api/study_boards/${id}`, data);
+export const postBoard = async ({ id, board }) => {
+  const response = await axios.post(`/api/study_boards/${id}`, board);
   return response.data;
 };
 export const postStudyRegist = async (studyId) => {
@@ -56,6 +56,13 @@ export const deleteStudy = async (studyId) => {
   const response = await axios.delete(`api/studies/${studyId}`);
   return response.data;
 };
+
+
+export const postComment = async (studyBoardId) => {
+  const response = await axios.post(`/api/comments/${studyBoardId}`);
+  return response.data;
+};
+
 
 export const postImageUpload = async (data) => {
   const response = await axios.post(`api/studies/file`, data, {

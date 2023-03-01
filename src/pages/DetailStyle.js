@@ -1,4 +1,12 @@
-import { pageMargin, flexCenter, boxBorderRadius, fontSmall, fontSmaller, fontBigger } from "../utils/styles/mixins";
+import { 
+  pageMargin, 
+  flexCenter, 
+  boxBorderRadius, 
+  fontSmall, 
+  fontSmaller, 
+  fontBigger, 
+  fontBig,
+} from "../utils/styles/mixins";
 import styled from "styled-components";
 
 export const DetailWrapper = styled.div`
@@ -78,13 +86,45 @@ export const StCommentText = styled.div`
   padding: 3rem;
 `
 
+export const StComment = styled.div`
+display: block;
+`
+
 export const StInput = styled.input`
   border-radius: 0.5rem;
   width: 60rem;
-  height: 8rem;
+  height: ${(props) => props.height || '6rem'};
+  font-size: 1.6rem;
+  text-indent: 1rem;
+  margin-bottom: 2rem;
+  
 
   ::placeholder {
     font-size: 1.6rem;
-    padding-left: 1rem;
+    text-indent: 1rem;
   }
+`
+
+export const BoardBox = styled.div`
+width: 60rem;
+min-height: 15rem;
+margin-bottom: 5rem;
+border: 1px solid ${(props) => props.theme.primary};
+padding: 1rem;
+${boxBorderRadius}
+.memberName { 
+  text-align: right;
+  margin-bottom: 0.1rem;
+}
+.createdAt {
+  text-align: right;
+  margin-bottom: 2rem;
+}
+.boardTitle {
+  margin-bottom: 1rem;
+  ${fontBig};
+}
+.boardContent {
+  ${fontSmaller}
+}
 `
