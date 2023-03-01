@@ -10,14 +10,20 @@ const ToggleModeButton = styled.button`
   width: 4rem;
   height: 4rem;
   ${circleBorderRadius}
-  background-color: yellow;
+  background-color: ${(props) => props.theme.bgColor};
   border: none;
+  svg {
+    color: ${(props) => props.theme.textColor3};
+  }
 `;
 
 const ToggleMode = () => {
   const [isDark, setIsDark] = useRecoilState(darkmodeState);
+  const onToggleDarkmode = () => {
+    setIsDark(!isDark);
+  };
   return (
-    <ToggleModeButton onClick={() => setIsDark(!isDark)}>
+    <ToggleModeButton onClick={() => onToggleDarkmode()}>
       {isDark === true ? (
         <BsFillMoonFill size={20} />
       ) : (
