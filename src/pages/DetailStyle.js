@@ -129,9 +129,13 @@ ${boxBorderRadius}
   ${fontSmaller}
   margin-bottom: 2rem;
 }
+.deleteButton {
+ text-align: right;
+}
 input {
   margin-bottom: 2rem;
 }
+
 `
 export const CommentInput = styled.input`
 ${boxBorderRadius}
