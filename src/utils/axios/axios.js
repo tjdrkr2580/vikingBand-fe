@@ -64,14 +64,17 @@ export const deleteStudy = async (studyId) => {
 };
 
 export const postComment = async (studyBoardId, newComment) => {
-    const response = await axios.post(`/api/comments/${studyBoardId}`, newComment);
-    return response.data
+  const response = await axios.post(
+    `/api/comments/${studyBoardId}`,
+    newComment
+  );
+  return response.data;
 };
 
 export const getComment = async (studyBoardId) => {
   const response = await axios.get(`/api/comments/${studyBoardId}`);
-  return response.data
-}
+  return response.data;
+};
 
 export const postImageUpload = async (data) => {
   const response = await axios.post(`/api/studies/file`, data, {

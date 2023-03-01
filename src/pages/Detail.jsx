@@ -10,6 +10,8 @@ import {
   postStudyWish,
   postBoard,
   deleteBoard,
+  getComment,
+  postComment,
 } from "../utils/axios/axios";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "../utils/recoil/atoms";
@@ -91,11 +93,11 @@ const Detail = () => {
         queryClient.invalidateQueries("study");
       },
     }
-  });
+  );
 
-  const onClickPostBoard = async ({id, board}) => {
-    if (board.title ==='' || board.content === '') {
-      alert ('제목과 내용을 입력해 주세요!')
+  const onClickPostBoard = async ({ id, board }) => {
+    if (board.title === "" || board.content === "") {
+      alert("제목과 내용을 입력해 주세요!");
     } else {
       await postBoardMutate.mutateAsync({ id, board });
     }
@@ -131,43 +133,56 @@ const Detail = () => {
   const appliedStatus = data?.data.applied;
   const approvedStatus = data?.data.approved;
 
-  const approvedMembers = data?.data.appliedMembers?.filter((member) => member.approved === true)
-  const boardInfos = data?.data.studyBoards.sort((a,b) => b.id - a.id)
-  
-  // Query로 댓글 데이터 가져오기 
-  const { isLoading: commentLoading, data: commentData } = useQuery("comment", () => getComment(id));
+  const approvedMembers = data?.data.appliedMembers?.filter(
+    (member) => member.approved === true
+  );
+  const boardInfos = data?.data.studyBoards.sort((a, b) => b.id - a.id);
+
+  // Query로 댓글 데이터 가져오기
+  const { isLoading: commentLoading, data: commentData } = useQuery(
+    "comment",
+    () => getComment(id)
+  );
   if (commentLoading === false) console.log(commentData?.content);
 
-
   //각 스터디보드 정보
-  const boardData = boardInfos?.map(({ id, memberId, memberName, title, content, createdAt }) => ({
-    id,
-    memberId,
-    memberName,
-    title,
-    content,
-    createdAt
-  }));
+  const boardData = boardInfos?.map(
+    ({ id, memberId, memberName, title, content, createdAt }) => ({
+      id,
+      memberId,
+      memberName,
+      title,
+      content,
+      createdAt,
+    })
+  );
 
-  //댓글 입력값 
-  const { value: comment, onChange: commentChangeHandler, reset: resetComment } = useInput("");
+  //댓글 입력값
+  const {
+    value: comment,
+    onChange: commentChangeHandler,
+    reset: resetComment,
+  } = useInput("");
 
-  //댓글 POST 요청 
+  //댓글 POST 요청
 
   const newComment = {
-    content : comment
-  }
+    content: comment,
+  };
 
-  const postCommentMutate = useMutation(({id, newComment}) => postComment({id, newComment}), {
+  const postCommentMutate = useMutation(
+    ({ id, newComment }) => postComment({ id, newComment }),
+    {
       onSuccess: () => {
-        queryClient.invalidateQueries("comment")
-      }
-  })
+        queryClient.invalidateQueries("comment");
+      },
+    }
+  );
 
-  const onClickPostComment = async ({id, newComment}) => {
-      await postCommentMutate.mutateAsync({id, newComment})
-      resetComment()
-  }
+  const onClickPostComment = async ({ id, newComment }) => {
+    await postCommentMutate.mutateAsync({ id, newComment });
+    resetComment();
+  };
 
   return (
     <DetailWrapper>
@@ -236,19 +251,18 @@ const Detail = () => {
           </OneLineDesc>
           <OneLineDesc>{data.data.content}</OneLineDesc>
 
-
-          <StCommentText>Study Board</StCommentText>
-          <StInput 
-          type ="text"
-          placeholder = {`${userInfo.memberName}님의 스터디보드 제목`}
-          value = {title}
-          onChange = {titleChangeHandler}
+          <StCommentText>한 줄 일기</StCommentText>
+          <StInput
+            type="text"
+            placeholder="제목"
+            value={title}
+            onChange={titleChangeHandler}
           />
-          
+
           <StInput
             height="12rem"
             type="text"
-            placeholder="내용을 입력해 주세요"
+            placeholder="내용을 입력해주세요"
             value={content}
             onChange={contentChangeHandler}
           />
@@ -259,26 +273,28 @@ const Detail = () => {
           <StCommentText>Study Board 모음</StCommentText>
 
           <div>
-          
-          {boardData && boardData.map((item, idx) => (
-          <BoardBox key={idx}>
-            <div className="memberName">{item.memberName}</div>
-            <div className="createdAt">{item.createdAt}</div>
-            <div className="boardTitle">제목 : {item.title}</div>
-            <div className="boardContent">내용 : {item.content}</div>
-            
-            {item.memberName === userInfo.memberName &&
-            <Button  
-            wh="m" 
-            className="deleteButton"
-            onClick = {() => onDeleteBoard(item.id)}
-            >방명록 삭제</Button>
-            }
-          </BoardBox>
-           ))}
-          </div> 
-      </>
-    )}
+            {boardData &&
+              boardData.map((item, idx) => (
+                <BoardBox key={idx}>
+                  <div className="memberName">{item.memberName}</div>
+                  <div className="createdAt">{item.createdAt}</div>
+                  <div className="boardTitle">제목 : {item.title}</div>
+                  <div className="boardContent">내용 : {item.content}</div>
+
+                  {item.memberName === userInfo.memberName && (
+                    <Button
+                      wh="m"
+                      className="deleteButton"
+                      onClick={() => onDeleteBoard(item.id)}
+                    >
+                      방명록 삭제
+                    </Button>
+                  )}
+                </BoardBox>
+              ))}
+          </div>
+        </>
+      )}
     </DetailWrapper>
   );
 };
