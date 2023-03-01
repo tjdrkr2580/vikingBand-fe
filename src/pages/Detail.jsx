@@ -1,15 +1,14 @@
 import React from "react";
 import study from "../assets/study.jpg";
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteStudyRegist, getStudy, postStudyRegist, postStudyWish, postBoard } from "../utils/axios/axios";
+import { deleteStudyRegist, getStudy, postStudyRegist, postStudyWish, postBoard, deleteBoard } from "../utils/axios/axios";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "../utils/recoil/atoms";
 import { getUserDetailInfo } from "../utils/axios/axios";
-
 import Button from "../element/Button";
+import useInput from "../hooks/useInput";
 import {
   DetailWrapper,
   ImgWrapper,
@@ -21,6 +20,7 @@ import {
   StCommentText,
   StInput,
   BoardBox,
+  CommentInput
 } from "./DetailStyle";
 
 const Detail = () => {
@@ -61,16 +61,10 @@ const Detail = () => {
   };
 
   // 스터디보드 제목/내용
-  const [title, setTitle] = useState('')
-  const titleChangeHandler = (e) => {
-    setTitle(e.target.value)
-  }
+  const { value: title, onChange: titleChangeHandler, reset: resetTitle } = useInput("");
+  const { value: content, onChange: contentChangeHandler, reset: resetContent } = useInput("");
 
-  const [content, setContent] = useState('')
-  const contentChangeHandler = (e) => {
-    setContent(e.target.value)
-  }
-
+  
   //스터디보드 POST
   const board = {
     title,
@@ -83,8 +77,28 @@ const Detail = () => {
     }
   });
   const onClickPostBoard = async ({id, board}) => {
-    await postBoardMutate.mutateAsync({id, board});
+    if (board.title ==='' || board.content === '') {
+      alert ('제목과 내용을 입력해 주세요!')
+    } else {
+      await postBoardMutate.mutateAsync({id, board});
+    }
+    resetTitle()
+    resetContent()
   };
+
+  //스터디 보드 DELETE
+
+  const deleteBoardMutate = useMutation((id) => deleteBoard(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("study");
+    },
+  });
+  
+  const onDeleteBoard = async (id) => {
+    const res = await deleteBoardMutate.mutateAsync(id);
+    console.log(res)
+  };
+
 
   // 스터디보드에 접속한 유저 아이디뽑기 
   const userInfo = useRecoilValue(userInfoState);
@@ -103,8 +117,8 @@ const Detail = () => {
   const approvedStatus = data?.data.approved;
   const approvedMembers = data?.data.appliedMembers?.filter((member) => member.approved === true)
   const boardInfos = data?.data.studyBoards.sort((a,b) => b.id - a.id)
-  //방명록 정보
   
+  //각 방명록 정보
   const boardData = boardInfos?.map(({ memberName, title, content, createdAt }) => ({
     memberName,
     title,
@@ -201,16 +215,28 @@ const Detail = () => {
           <StCommentText>방명록 모음</StCommentText>
 
           <div>
-          {boardData.map((item, index) => (
-          <div key={index}>
-          <BoardBox>
-          <div className="memberName">작성자 : {item.memberName}</div> 
-          <div className ="createdAt">{item.createdAt.substring(0,19)}</div>
-          <div className="boardTitle">제목 : {item.title} </div>
-          <div className="boardContent">내용 : {item.content}</div> 
+          {boardData && boardData.map((item, idx) => (
+          <BoardBox key={idx}>
+            <div className="memberName">{item.memberName}</div>
+            <div className="createdAt">{item.createdAt}</div>
+            <div className="boardTitle">{item.title}</div>
+            <div className="boardContent">{item.content}</div>
+            <div className="input">
+            <CommentInput type = "text"/>
+            <Button 
+            wh = 's'
+            >댓글 추가</Button>
+            </div>
+            
+            {item.memberName === userInfo.memberName &&
+            <Button 
+            wh="m" 
+            className="deleteButton"
+            onClick = {() => onDeleteBoard(id)}
+            >방명록 삭제</Button>
+            }
           </BoardBox>
-          </div>
-        ))}
+           ))}
             
           </div>    
           
