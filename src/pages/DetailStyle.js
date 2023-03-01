@@ -123,8 +123,19 @@ ${boxBorderRadius}
 .boardTitle {
   margin-bottom: 1rem;
   ${fontBig};
+  margin-bottom: 2rem;
 }
 .boardContent {
   ${fontSmaller}
+  margin-bottom: 2rem;
 }
+input {
+  margin-bottom: 2rem;
+}
+`
+export const CommentInput = styled.input`
+${boxBorderRadius}
+width: 45rem;
+height: 4rem;
+margin-right: 1.5rem;
 `
