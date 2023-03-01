@@ -96,7 +96,6 @@ const Detail = () => {
   
   const onDeleteBoard = async (id) => {
     const res = await deleteBoardMutate.mutateAsync(id);
-    console.log(res)
   };
 
 
@@ -106,7 +105,7 @@ const Detail = () => {
     return getUserDetailInfo(userInfo.memberName);
   });
   if (res.isLoading === false) {
-    console.log(userInfo.memberName);
+    // console.log(userInfo.memberName);
   }
 
   // 데이터 Query로 가져오기
@@ -119,7 +118,8 @@ const Detail = () => {
   const boardInfos = data?.data.studyBoards.sort((a,b) => b.id - a.id)
   
   //각 방명록 정보
-  const boardData = boardInfos?.map(({ memberName, title, content, createdAt }) => ({
+  const boardData = boardInfos?.map(({ id, memberName, title, content, createdAt }) => ({
+    id,
     memberName,
     title,
     content,
@@ -232,7 +232,7 @@ const Detail = () => {
             <Button 
             wh="m" 
             className="deleteButton"
-            onClick = {() => onDeleteBoard(id)}
+            onClick = {() => onDeleteBoard(item.id)}
             >방명록 삭제</Button>
             }
           </BoardBox>
