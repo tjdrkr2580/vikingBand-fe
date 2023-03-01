@@ -10,6 +10,7 @@ import {
 import Button from "../element/Button";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteStudy, getStudy } from "../utils/axios/axios";
+import MyStudyDetail from "./MyStudyDetail";
 
 const MyStudyLists = styled.ul`
   display: flex;
@@ -56,10 +57,6 @@ const MyStudy = ({ data }) => {
     },
   });
 
-  const { isLoading, res } = useQuery("detailInfo", (studyId) =>
-    getStudy(studyId)
-  );
-
   const onDelete = async (studyId) => {
     const res = onDeleteMutation.mutateAsync(studyId);
     console.log(res);
@@ -80,6 +77,9 @@ const MyStudy = ({ data }) => {
               <Button wh="s" onClick={() => onDelete(data.studyId)}>
                 삭제
               </Button>
+              <div>
+                <MyStudyDetail studyId={data.studyId} />
+              </div>
             </MyStudyList>
           ))}
       </MyStudyLists>
