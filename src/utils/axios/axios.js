@@ -3,17 +3,26 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 export const loginUser = async (User) => {
-  const response = await axios.post(`/api/members/login`, User);
+  const response = await axios.post(
+    `https://api.jingyulee.shop/api/members/login`,
+    User
+  );
   return response;
 };
 
 export const addNewUser = async (newUser) => {
-  const response = await axios.post(`/api/members/signup`, newUser);
+  const response = await axios.post(
+    `https://api.jingyulee.shop/api/members/signup`,
+    newUser
+  );
   return response;
 };
 
 export const addNewStudy = async (newStudy) => {
-  const response = await axios.post(`/api/studies`, newStudy);
+  const response = await axios.post(
+    `https://api.jingyulee.shop/api/studies`,
+    newStudy
+  );
   return response;
 };
 
