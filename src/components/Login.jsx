@@ -1,13 +1,14 @@
 import { motion } from "framer-motion";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSetRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import Button from "../element/Button";
 import { modalVariants } from "../utils/animations/variants";
 import {
   isModalState,
   isUserState,
+  tokenState,
   userInfoState,
 } from "../utils/recoil/atoms";
 import {
@@ -35,6 +36,7 @@ const Modal = styled(motion.form)`
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
   const modalRef = useRef(null);
+  const [token, setToken] = useRecoilState(tokenState);
   const setVisible = useSetRecoilState(isModalState);
   const setUserInfo = useSetRecoilState(userInfoState);
   const setIsUser = useSetRecoilState(isUserState);
@@ -44,7 +46,6 @@ const Login = () => {
     handleSubmit,
     reset,
   } = useForm();
-  const [cookies, setCookie] = useCookies();
   const registerMutation = useMutation((newUser) => addNewUser(newUser));
   const loginMutation = useMutation((User) => loginUser(User));
   const onSubmit = async (data) => {
@@ -54,10 +55,9 @@ const Login = () => {
         password: data.password,
       };
       const res = await loginMutation.mutateAsync(User);
-      console.log(res);
-      setCookie("vToken", res.headers.authorization);
       setUserInfo(res.data.data);
-      axios.defaults.headers.common["Authorization"] = cookies["vToken"];
+      axios.defaults.headers.common["Authorization"] =
+        res.headers.authorization;
       setIsUser(true);
       setVisible(false);
     } else {
