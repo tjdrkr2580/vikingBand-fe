@@ -119,7 +119,7 @@ const Home = () => {
     <HomeWrapper>
       <NavBar />
       <PostLists>
-        {isLoading === false &&
+        {/* {isLoading === false &&
           data !== undefined &&
           data?.data.data.map((post, i) => (
             <PostList
@@ -156,7 +156,7 @@ const Home = () => {
                 </section>
               </PostForm>
             </PostList>
-          ))}
+          ))} */}
       </PostLists>
     </HomeWrapper>
   );
