@@ -91,10 +91,11 @@ const Detail = () => {
         queryClient.invalidateQueries("study");
       },
     }
-  );
-  const onClickPostBoard = async ({ id, board }) => {
-    if (board.title === "" || board.content === "") {
-      alert("제목과 내용을 입력해 주세요!");
+  });
+
+  const onClickPostBoard = async ({id, board}) => {
+    if (board.title ==='' || board.content === '') {
+      alert ('제목과 내용을 입력해 주세요!')
     } else {
       await postBoardMutate.mutateAsync({ id, board });
     }
@@ -123,27 +124,50 @@ const Detail = () => {
     // console.log(userInfo.memberName);
   }
 
-  // 데이터 Query로 가져오기
+  // Query로 스터디 데이터 가져오기
   const { isLoading, data } = useQuery("study", () => getStudy(id));
   if (isLoading === false) console.log(data.data);
   const likedStatus = data?.data.wished;
   const appliedStatus = data?.data.applied;
   const approvedStatus = data?.data.approved;
-  const approvedMembers = data?.data.appliedMembers?.filter(
-    (member) => member.approved === true
-  );
-  const boardInfos = data?.data.studyBoards.sort((a, b) => b.id - a.id);
 
-  //각 방명록 정보
-  const boardData = boardInfos?.map(
-    ({ id, memberName, title, content, createdAt }) => ({
-      id,
-      memberName,
-      title,
-      content,
-      createdAt,
-    })
-  );
+  const approvedMembers = data?.data.appliedMembers?.filter((member) => member.approved === true)
+  const boardInfos = data?.data.studyBoards.sort((a,b) => b.id - a.id)
+  
+  // Query로 댓글 데이터 가져오기 
+  const { isLoading: commentLoading, data: commentData } = useQuery("comment", () => getComment(id));
+  if (commentLoading === false) console.log(commentData?.content);
+
+
+  //각 스터디보드 정보
+  const boardData = boardInfos?.map(({ id, memberId, memberName, title, content, createdAt }) => ({
+    id,
+    memberId,
+    memberName,
+    title,
+    content,
+    createdAt
+  }));
+
+  //댓글 입력값 
+  const { value: comment, onChange: commentChangeHandler, reset: resetComment } = useInput("");
+
+  //댓글 POST 요청 
+
+  const newComment = {
+    content : comment
+  }
+
+  const postCommentMutate = useMutation(({id, newComment}) => postComment({id, newComment}), {
+      onSuccess: () => {
+        queryClient.invalidateQueries("comment")
+      }
+  })
+
+  const onClickPostComment = async ({id, newComment}) => {
+      await postCommentMutate.mutateAsync({id, newComment})
+      resetComment()
+  }
 
   return (
     <DetailWrapper>
@@ -212,13 +236,15 @@ const Detail = () => {
           </OneLineDesc>
           <OneLineDesc>{data.data.content}</OneLineDesc>
 
-          <StCommentText>방명록 쓰기</StCommentText>
-          <StInput
-            type="text"
-            placeholder={`${userInfo.memberName}님의 방명록 제목`}
-            value={title}
-            onChange={titleChangeHandler}
+
+          <StCommentText>Study Board</StCommentText>
+          <StInput 
+          type ="text"
+          placeholder = {`${userInfo.memberName}님의 스터디보드 제목`}
+          value = {title}
+          onChange = {titleChangeHandler}
           />
+          
           <StInput
             height="12rem"
             type="text"
@@ -230,35 +256,29 @@ const Detail = () => {
             제출
           </Button>
 
-          <StCommentText>방명록 모음</StCommentText>
+          <StCommentText>Study Board 모음</StCommentText>
 
           <div>
-            {boardData &&
-              boardData.map((item, idx) => (
-                <BoardBox key={idx}>
-                  <div className="memberName">{item.memberName}</div>
-                  <div className="createdAt">{item.createdAt}</div>
-                  <div className="boardTitle">{item.title}</div>
-                  <div className="boardContent">{item.content}</div>
-                  <div className="input">
-                    <CommentInput type="text" />
-                    <Button wh="s">댓글 추가</Button>
-                  </div>
-
-                  {item.memberName === userInfo.memberName && (
-                    <Button
-                      wh="m"
-                      className="deleteButton"
-                      onClick={() => onDeleteBoard(item.id)}
-                    >
-                      방명록 삭제
-                    </Button>
-                  )}
-                </BoardBox>
-              ))}
-          </div>
-        </>
-      )}
+          
+          {boardData && boardData.map((item, idx) => (
+          <BoardBox key={idx}>
+            <div className="memberName">{item.memberName}</div>
+            <div className="createdAt">{item.createdAt}</div>
+            <div className="boardTitle">제목 : {item.title}</div>
+            <div className="boardContent">내용 : {item.content}</div>
+            
+            {item.memberName === userInfo.memberName &&
+            <Button  
+            wh="m" 
+            className="deleteButton"
+            onClick = {() => onDeleteBoard(item.id)}
+            >방명록 삭제</Button>
+            }
+          </BoardBox>
+           ))}
+          </div> 
+      </>
+    )}
     </DetailWrapper>
   );
 };
