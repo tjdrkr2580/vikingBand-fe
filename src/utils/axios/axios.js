@@ -116,3 +116,10 @@ export const postImageUpload = async (data) => {
   );
   return response.data;
 };
+
+export const getHottest = async () => {
+  const response = await axios.get(
+    "https://api.jingyulee.shop/api/studies/hottest"
+  );
+  return response;
+};

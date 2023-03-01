@@ -12,7 +12,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { isModalState, isUserState } from "../utils/recoil/atoms";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
-import { getStudies } from "../utils/axios/axios";
+import { getHottest, getStudies } from "../utils/axios/axios";
 import { AiFillHeart } from "react-icons/ai";
 
 const HomeWrapper = styled.section`
@@ -114,7 +114,7 @@ const Home = () => {
   const navigateToPost = (postId) => {
     navigate(`/post/${postId}`);
   };
-  const { isLoading, data } = useQuery("studies", getStudies);
+  const { isLoading, data } = useQuery("studies", getHottest);
   return (
     <HomeWrapper>
       <NavBar />
