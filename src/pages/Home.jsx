@@ -115,6 +115,9 @@ const Home = () => {
     navigate(`/post/${postId}`);
   };
   const { isLoading, data } = useQuery("studies", getStudies);
+  if (isLoading === false) {
+    console.log(data);
+  }
   return (
     <HomeWrapper>
       <NavBar />
