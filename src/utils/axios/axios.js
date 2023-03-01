@@ -43,8 +43,8 @@ export const postBoard = async ({ id, board }) => {
   return response.data;
 };
 
-export const deleteBoard = async (id) => {
-  const response = await axios.delete(`/api/study_boards/${id}`);
+export const deleteBoard = async (boardId) => {
+  const response = await axios.delete(`/api/study_boards/${boardId}`);
   return response.data;
 };
 
