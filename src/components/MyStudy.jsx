@@ -8,8 +8,8 @@ import {
   fontSmall,
 } from "../utils/styles/mixins";
 import Button from "../element/Button";
-import { useMutation, useQueryClient } from "react-query";
-import { deleteStudy } from "../utils/axios/axios";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteStudy, getStudy } from "../utils/axios/axios";
 
 const MyStudyLists = styled.ul`
   display: flex;
@@ -56,28 +56,34 @@ const MyStudy = ({ data }) => {
     },
   });
 
+  const { isLoading, res } = useQuery("detailInfo", (studyId) =>
+    getStudy(studyId)
+  );
+
   const onDelete = async (studyId) => {
     const res = onDeleteMutation.mutateAsync(studyId);
     console.log(res);
   };
 
   return (
-    <MyStudyLists>
+    <>
       {data.length === 0 && <Text>생성하신 스터디가 존재하지 않습니다.</Text>}
-      {data.length !== 0 &&
-        data.map((data) => (
-          <MyStudyList key={data.studyId}>
-            <h1>{data.title}</h1>
-            <Like>
-              <AiFillHeart size={20} color="EB455F" />
-              <span>{data.likes}</span>
-            </Like>
-            <Button wh="s" onClick={() => onDelete(data.studyId)}>
-              삭제
-            </Button>
-          </MyStudyList>
-        ))}
-    </MyStudyLists>
+      <MyStudyLists>
+        {data.length !== 0 &&
+          data.map((data) => (
+            <MyStudyList key={data.studyId}>
+              <h1>{data.title}</h1>
+              <Like>
+                <AiFillHeart size={20} color="EB455F" />
+                <span>{data.likes}</span>
+              </Like>
+              <Button wh="s" onClick={() => onDelete(data.studyId)}>
+                삭제
+              </Button>
+            </MyStudyList>
+          ))}
+      </MyStudyLists>
+    </>
   );
 };
 
