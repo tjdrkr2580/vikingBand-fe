@@ -115,14 +115,11 @@ const Home = () => {
     navigate(`/post/${postId}`);
   };
   const { isLoading, data } = useQuery("studies", getStudies);
-  if (isLoading === false) {
-    console.log(data);
-  }
   return (
     <HomeWrapper>
       <NavBar />
       <PostLists>
-        {/* {isLoading === false &&
+        {isLoading === false &&
           data !== undefined &&
           data?.data.data.map((post, i) => (
             <PostList
@@ -159,7 +156,7 @@ const Home = () => {
                 </section>
               </PostForm>
             </PostList>
-          ))} */}
+          ))}
       </PostLists>
     </HomeWrapper>
   );
