@@ -120,7 +120,8 @@ const Home = () => {
       <NavBar />
       <PostLists>
         {isLoading === false &&
-          data.data.data.map((post, i) => (
+          data !== undefined &&
+          data?.data.data.map((post, i) => (
             <PostList
               key={i}
               onClick={() => {

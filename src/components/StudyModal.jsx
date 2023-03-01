@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { studyModalState } from "../utils/recoil/atoms";
 import {
@@ -28,7 +28,6 @@ const ErrorMessage = styled.p`
 `;
 
 const StudyModal = () => {
-  const [formData, setFormData] = useState(new FormData());
   const [url, setUrl] = useState("");
   const queryClient = useQueryClient();
   const studymodal = useRef(null);
