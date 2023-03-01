@@ -8,8 +8,14 @@ import {
   getStudy,
   postStudyRegist,
   postStudyWish,
+  postBoard,
+  deleteBoard,
 } from "../utils/axios/axios";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "../utils/recoil/atoms";
+import { getUserDetailInfo } from "../utils/axios/axios";
 import Button from "../element/Button";
+import useInput from "../hooks/useInput";
 import {
   DetailWrapper,
   ImgWrapper,
@@ -20,6 +26,8 @@ import {
   StStudyMember,
   StCommentText,
   StInput,
+  BoardBox,
+  CommentInput,
 } from "./DetailStyle";
 
 const Detail = () => {
@@ -38,17 +46,7 @@ const Detail = () => {
     await wishMutate.mutateAsync(id);
   };
 
-  const { isLoading, data } = useQuery("study", () => getStudy(id));
-  if (isLoading === false) console.log(data.data);
-  const likedStatus = data?.data.wished;
-  const appliedStatus = data?.data.applied;
-  const approvedStatus = data?.data.approved;
-  const appliedMembers = data?.data.appliedMembers;
-  const approvedMembers = appliedMembers?.filter(
-    (member) => member.approved === true
-  );
-
-  // 가입신청
+  //가입신청
   const registerMutate = useMutation((id) => postStudyRegist(id), {
     onSuccess: () => {
       queryClient.invalidateQueries("study");
@@ -67,6 +65,109 @@ const Detail = () => {
   const onCancelRegister = async (id) => {
     await cancelRegisterMutate.mutateAsync(id);
   };
+
+  // 스터디보드 제목/내용
+  const {
+    value: title,
+    onChange: titleChangeHandler,
+    reset: resetTitle,
+  } = useInput("");
+  const {
+    value: content,
+    onChange: contentChangeHandler,
+    reset: resetContent,
+  } = useInput("");
+
+  //스터디보드 POST
+  const board = {
+    title,
+    content,
+  };
+
+  const postBoardMutate = useMutation(
+    ({ id, board }) => postBoard({ id, board }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("study");
+      },
+    }
+  });
+
+  const onClickPostBoard = async ({id, board}) => {
+    if (board.title ==='' || board.content === '') {
+      alert ('제목과 내용을 입력해 주세요!')
+    } else {
+      await postBoardMutate.mutateAsync({ id, board });
+    }
+    resetTitle();
+    resetContent();
+  };
+
+  //스터디 보드 DELETE
+
+  const deleteBoardMutate = useMutation((id) => deleteBoard(id), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("study");
+    },
+  });
+
+  const onDeleteBoard = async (id) => {
+    const res = await deleteBoardMutate.mutateAsync(id);
+  };
+
+  // 스터디보드에 접속한 유저 아이디뽑기
+  const userInfo = useRecoilValue(userInfoState);
+  const res = useQuery("detailInfo", () => {
+    return getUserDetailInfo(userInfo.memberId);
+  });
+  if (res.isLoading === false) {
+    // console.log(userInfo.memberName);
+  }
+
+  // Query로 스터디 데이터 가져오기
+  const { isLoading, data } = useQuery("study", () => getStudy(id));
+  if (isLoading === false) console.log(data.data);
+  const likedStatus = data?.data.wished;
+  const appliedStatus = data?.data.applied;
+  const approvedStatus = data?.data.approved;
+
+  const approvedMembers = data?.data.appliedMembers?.filter((member) => member.approved === true)
+  const boardInfos = data?.data.studyBoards.sort((a,b) => b.id - a.id)
+  
+  // Query로 댓글 데이터 가져오기 
+  const { isLoading: commentLoading, data: commentData } = useQuery("comment", () => getComment(id));
+  if (commentLoading === false) console.log(commentData?.content);
+
+
+  //각 스터디보드 정보
+  const boardData = boardInfos?.map(({ id, memberId, memberName, title, content, createdAt }) => ({
+    id,
+    memberId,
+    memberName,
+    title,
+    content,
+    createdAt
+  }));
+
+  //댓글 입력값 
+  const { value: comment, onChange: commentChangeHandler, reset: resetComment } = useInput("");
+
+  //댓글 POST 요청 
+
+  const newComment = {
+    content : comment
+  }
+
+  const postCommentMutate = useMutation(({id, newComment}) => postComment({id, newComment}), {
+      onSuccess: () => {
+        queryClient.invalidateQueries("comment")
+      }
+  })
+
+  const onClickPostComment = async ({id, newComment}) => {
+      await postCommentMutate.mutateAsync({id, newComment})
+      resetComment()
+  }
 
   return (
     <DetailWrapper>
@@ -134,10 +235,50 @@ const Detail = () => {
             ))}
           </OneLineDesc>
           <OneLineDesc>{data.data.content}</OneLineDesc>
-          <StCommentText>우리 스터디 방명록</StCommentText>
-          <StInput type="text" placeholder="오늘의 한마디를 적어주세요" />
-        </>
-      )}
+
+
+          <StCommentText>Study Board</StCommentText>
+          <StInput 
+          type ="text"
+          placeholder = {`${userInfo.memberName}님의 스터디보드 제목`}
+          value = {title}
+          onChange = {titleChangeHandler}
+          />
+          
+          <StInput
+            height="12rem"
+            type="text"
+            placeholder="내용을 입력해 주세요"
+            value={content}
+            onChange={contentChangeHandler}
+          />
+          <Button wh="l" onClick={() => onClickPostBoard({ id, board })}>
+            제출
+          </Button>
+
+          <StCommentText>Study Board 모음</StCommentText>
+
+          <div>
+          
+          {boardData && boardData.map((item, idx) => (
+          <BoardBox key={idx}>
+            <div className="memberName">{item.memberName}</div>
+            <div className="createdAt">{item.createdAt}</div>
+            <div className="boardTitle">제목 : {item.title}</div>
+            <div className="boardContent">내용 : {item.content}</div>
+            
+            {item.memberName === userInfo.memberName &&
+            <Button  
+            wh="m" 
+            className="deleteButton"
+            onClick = {() => onDeleteBoard(item.id)}
+            >방명록 삭제</Button>
+            }
+          </BoardBox>
+           ))}
+          </div> 
+      </>
+    )}
     </DetailWrapper>
   );
 };

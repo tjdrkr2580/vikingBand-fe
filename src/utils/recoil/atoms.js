@@ -40,5 +40,5 @@ export const userDetailInfo = atom({
 
 export const tokenState = atom({
   key: `state${v1()}`,
-  default: false,
+  default: undefined,
 });
