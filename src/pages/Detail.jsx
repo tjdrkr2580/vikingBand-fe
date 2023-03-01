@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-
 import { deleteStudyRegist, getStudy, postStudyRegist, postStudyWish, postBoard } from "../utils/axios/axios";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "../utils/recoil/atoms";
@@ -103,12 +102,10 @@ const Detail = () => {
   const appliedStatus = data?.data.applied;
   const approvedStatus = data?.data.approved;
   const approvedMembers = data?.data.appliedMembers?.filter((member) => member.approved === true)
-
+  const boardInfos = data?.data.studyBoards.sort((a,b) => b.id - a.id)
   //방명록 정보
-
-  const boardInfos = data.data.studyBoards.sort((a,b) => b.id - a.id)
-  console.log(boardInfos)
-  const boardData = boardInfos.map(({ memberName, title, content, createdAt }) => ({
+  
+  const boardData = boardInfos?.map(({ memberName, title, content, createdAt }) => ({
     memberName,
     title,
     content,
