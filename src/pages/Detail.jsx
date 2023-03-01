@@ -3,7 +3,14 @@ import study from "../assets/study.jpg";
 import { useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useMutation, useQuery, useQueryClient } from "react-query";
-import { deleteStudyRegist, getStudy, postStudyRegist, postStudyWish, postBoard, deleteBoard, postComment, getComment } from "../utils/axios/axios";
+import {
+  deleteStudyRegist,
+  getStudy,
+  postStudyRegist,
+  postStudyWish,
+  postBoard,
+  deleteBoard,
+} from "../utils/axios/axios";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "../utils/recoil/atoms";
 import { getUserDetailInfo } from "../utils/axios/axios";
@@ -20,11 +27,10 @@ import {
   StCommentText,
   StInput,
   BoardBox,
-  CommentInput
+  CommentInput,
 } from "./DetailStyle";
 
 const Detail = () => {
-
   const { id } = useParams();
 
   const queryClient = useQueryClient();
@@ -61,18 +67,29 @@ const Detail = () => {
   };
 
   // 스터디보드 제목/내용
-  const { value: title, onChange: titleChangeHandler, reset: resetTitle } = useInput("");
-  const { value: content, onChange: contentChangeHandler, reset: resetContent } = useInput("");
+  const {
+    value: title,
+    onChange: titleChangeHandler,
+    reset: resetTitle,
+  } = useInput("");
+  const {
+    value: content,
+    onChange: contentChangeHandler,
+    reset: resetContent,
+  } = useInput("");
 
   //스터디보드 POST
   const board = {
     title,
-    content
-  }
+    content,
+  };
 
-  const postBoardMutate = useMutation(({id, board}) => postBoard({id, board}), {
-    onSuccess: () => {
-      queryClient.invalidateQueries("study")
+  const postBoardMutate = useMutation(
+    ({ id, board }) => postBoard({ id, board }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("study");
+      },
     }
   });
 
@@ -80,10 +97,10 @@ const Detail = () => {
     if (board.title ==='' || board.content === '') {
       alert ('제목과 내용을 입력해 주세요!')
     } else {
-      await postBoardMutate.mutateAsync({id, board});
+      await postBoardMutate.mutateAsync({ id, board });
     }
-    resetTitle()
-    resetContent()
+    resetTitle();
+    resetContent();
   };
 
   //스터디 보드 DELETE
@@ -93,13 +110,12 @@ const Detail = () => {
       queryClient.invalidateQueries("study");
     },
   });
-  
+
   const onDeleteBoard = async (id) => {
     const res = await deleteBoardMutate.mutateAsync(id);
   };
 
-
-  // 스터디보드에 접속한 유저 아이디뽑기 
+  // 스터디보드에 접속한 유저 아이디뽑기
   const userInfo = useRecoilValue(userInfoState);
   const res = useQuery("detailInfo", () => {
     return getUserDetailInfo(userInfo.memberId);
@@ -110,10 +126,11 @@ const Detail = () => {
 
   // Query로 스터디 데이터 가져오기
   const { isLoading, data } = useQuery("study", () => getStudy(id));
-  if (isLoading === false) console.log(data.data)
+  if (isLoading === false) console.log(data.data);
   const likedStatus = data?.data.wished;
   const appliedStatus = data?.data.applied;
   const approvedStatus = data?.data.approved;
+
   const approvedMembers = data?.data.appliedMembers?.filter((member) => member.approved === true)
   const boardInfos = data?.data.studyBoards.sort((a,b) => b.id - a.id)
   
@@ -219,6 +236,7 @@ const Detail = () => {
           </OneLineDesc>
           <OneLineDesc>{data.data.content}</OneLineDesc>
 
+
           <StCommentText>Study Board</StCommentText>
           <StInput 
           type ="text"
@@ -226,21 +244,22 @@ const Detail = () => {
           value = {title}
           onChange = {titleChangeHandler}
           />
+          
           <StInput
-          height = '12rem'
-          type ="text"
-          placeholder = '내용을 입력해 주세요'
-          value = {content}
-          onChange = {contentChangeHandler}
+            height="12rem"
+            type="text"
+            placeholder="내용을 입력해 주세요"
+            value={content}
+            onChange={contentChangeHandler}
           />
-          <Button 
-          wh = "l"
-          onClick = {() => onClickPostBoard({id, board})}
-          >제출</Button>
+          <Button wh="l" onClick={() => onClickPostBoard({ id, board })}>
+            제출
+          </Button>
 
           <StCommentText>Study Board 모음</StCommentText>
 
           <div>
+          
           {boardData && boardData.map((item, idx) => (
           <BoardBox key={idx}>
             <div className="memberName">{item.memberName}</div>
