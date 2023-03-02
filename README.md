@@ -16,8 +16,6 @@
 
 ## API 명세서
 
-----------
-
 [Swagger](http://viking-band.chit-chat.shop/swagger-ui/index.html#/)
 
 
