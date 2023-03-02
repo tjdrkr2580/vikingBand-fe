@@ -22,6 +22,7 @@ const PostForm = styled.section`
 `;
 
 const Text = styled.h1`
+  margin: 0 auto;
   ${fontBig}
 `;
 

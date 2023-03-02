@@ -50,6 +50,7 @@ const Profile = () => {
   const res = useQuery("detailInfo", () => {
     return getUserDetailInfo(userInfo.memberId);
   });
+  console.log(res.data);
   return (
     <ProfileWrapper>
       {res.isSuccess === true && (
@@ -81,7 +82,7 @@ const Profile = () => {
             <ApplyStudy data={res?.data?.myStudyRegists} />
           )}
           {filter === "내 스터디 관리" && (
-            <MyStudy data={res?.data?.myCreatedStudies} />
+            <MyStudy data={res?.data?.myStudiesWithRegistMembers} />
           )}
         </>
       )}

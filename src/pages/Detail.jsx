@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import study from "../assets/study.jpg";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import {
@@ -13,8 +13,12 @@ import {
   getComment,
   postComment,
 } from "../utils/axios/axios";
-import { useRecoilValue } from "recoil";
-import { userInfoState } from "../utils/recoil/atoms";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import {
+  isModalState,
+  isUserState,
+  userInfoState,
+} from "../utils/recoil/atoms";
 import { getUserDetailInfo } from "../utils/axios/axios";
 import Button from "../element/Button";
 import useInput from "../hooks/useInput";
@@ -29,14 +33,14 @@ import {
   StCommentText,
   StInput,
   BoardBox,
-  CommentInput,
 } from "./DetailStyle";
 
 const Detail = () => {
   const { id } = useParams();
-
+  const isUser = useRecoilValue(isUserState);
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-
+  const setModalState = useSetRecoilState(isModalState);
   // 찜하기
   const wishMutate = useMutation((id) => postStudyWish(id), {
     onSuccess: () => {
@@ -128,7 +132,6 @@ const Detail = () => {
 
   // Query로 스터디 데이터 가져오기
   const { isLoading, data } = useQuery("study", () => getStudy(id));
-  if (isLoading === false) console.log(data.data);
   const likedStatus = data?.data.wished;
   const appliedStatus = data?.data.applied;
   const approvedStatus = data?.data.approved;
@@ -143,7 +146,6 @@ const Detail = () => {
     "comment",
     () => getComment(id)
   );
-  if (commentLoading === false) console.log(commentData?.content);
 
   //각 스터디보드 정보
   const boardData = boardInfos?.map(
@@ -183,6 +185,13 @@ const Detail = () => {
     await postCommentMutate.mutateAsync({ id, newComment });
     resetComment();
   };
+
+  useEffect(() => {
+    if (isUser === false) {
+      navigate("/");
+      setModalState(true);
+    }
+  }, []);
 
   return (
     <DetailWrapper>
