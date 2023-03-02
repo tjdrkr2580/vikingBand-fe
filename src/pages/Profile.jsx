@@ -82,7 +82,7 @@ const Profile = () => {
             <ApplyStudy data={res?.data?.myStudyRegists} />
           )}
           {filter === "내 스터디 관리" && (
-            <MyStudy data={res?.data?.myStudiesWithRegistMembers} />
+            <MyStudy data={res?.data?.myStudiesWithAppliedMembers} />
           )}
         </>
       )}
