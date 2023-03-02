@@ -42,7 +42,6 @@ function App() {
             <Route path="/post/:id" element={<Detail />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
-          <Footer />
         </BrowserRouter>
         {isModalStudy === true && <StudyModal />}
         {visible === true && <Login />}

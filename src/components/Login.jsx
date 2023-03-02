@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import styled from "styled-components";
 import Button from "../element/Button";
 import { modalVariants } from "../utils/animations/variants";
 import {
   isModalState,
   isUserState,
-  tokenState,
   userInfoState,
 } from "../utils/recoil/atoms";
 import {
@@ -18,7 +17,6 @@ import {
 } from "../utils/styles/mixins";
 import { addNewUser, loginUser } from "../utils/axios/axios";
 import { useMutation } from "react-query";
-import { useCookies } from "react-cookie";
 import axios from "axios";
 
 const ModalWrapper = styled.section`
@@ -36,7 +34,6 @@ const Modal = styled(motion.form)`
 const Login = () => {
   const [isRegister, setIsRegister] = useState(false);
   const modalRef = useRef(null);
-  const [token, setToken] = useRecoilState(tokenState);
   const setVisible = useSetRecoilState(isModalState);
   const setUserInfo = useSetRecoilState(userInfoState);
   const setIsUser = useSetRecoilState(isUserState);

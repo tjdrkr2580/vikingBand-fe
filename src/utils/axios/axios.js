@@ -42,7 +42,6 @@ export const getUserDetailInfo = async (id) => {
   const response = await axios.get(
     `https://api.jingyulee.shop/api/members/details/${id}`
   );
-  console.log(response);
   return response.data.data;
 };
 
@@ -118,8 +117,20 @@ export const postImageUpload = async (data) => {
 };
 
 export const getHottest = async () => {
-  const response = await axios.get(
-    "https://api.jingyulee.shop/api/studies/hottest"
-  );
+  const response = await axios.get("https://api.jingyulee.shop/api/studies/hottest");
   return response;
+};
+
+export const putApprove = async ({ studyId, registMemberId }) => {
+  const response = await axios.put(
+    `https://api.jingyulee.shop/api/study_register/approve?studyId=${studyId}&registMemberId=${registMemberId}`
+  );
+  return response.data;
+};
+
+export const putDeny = async ({ studyId, registMemberId }) => {
+  const response = await axios.delete(
+    `https://api.jingyulee.shop/api/study_register/deny?studyId=${studyId}&registMemberId=${registMemberId}`
+  );
+  return response.data;
 };

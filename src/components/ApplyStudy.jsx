@@ -28,7 +28,6 @@ const Text = styled.h1`
 `;
 
 const ApplyStudy = ({ data }) => {
-  console.log(data);
   return (
     <>
       {data.length === 0 && <Text>좋아요 한 스터디가 존재하지 않습니다!</Text>}
