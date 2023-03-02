@@ -36,7 +36,10 @@ const ApplyStudy = ({ data }) => {
         {data.length !== 0 &&
           data.map((data) => (
             <ApplyStudylist key={data.studyId}>
-              <img src={test} alt={data.title} />
+              <img
+                src={data.imageUrl === "" ? test : data.imageUrl}
+                alt={data.title}
+              />
               <PostForm>
                 <h1 className="title">{data.title}</h1>
                 <span className="subject">{data.subject}</span>
