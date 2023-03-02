@@ -78,6 +78,7 @@ const ApplyList = styled.li`
 `;
 
 const MyStudy = ({ data }) => {
+  console.log(data);
   const queryClient = useQueryClient();
   const onDeleteMutation = useMutation((studyId) => deleteStudy(studyId), {
     onSuccess: () => {
